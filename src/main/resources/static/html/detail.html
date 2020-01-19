@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <link type="text/css" rel="stylesheet" href="../../layui/css/layui.css" />
+        <style type="text/css">
+            body {
+                background-color: #D8E6E7;
+                padding-bottom: 20px;
+            }
+            .content-account-text div {
+                display: inline-block;
+                cursor: pointer;
+                margin-left: 20px;
+            }
+            .content-account-text a:hover {
+                color: #e8e8e8;
+            }
+            .content-account-text a:active {
+                color: #000000;
+            }
+            .content-form-input .layui-input {
+                width: 554px;
+                /*height: 30px;*/
+                margin-top: 12px;
+                display: inline-block;
+            }
+            .content-form-input .layui-btn {
+                /*height: 30px;*/
+                line-height: 30px;
+                padding: 0 12px;
+            }
+            .detail-content {
+                background-color: #60a3bc;
+                min-height: 150px;
+                width: 1080px;
+                margin: 10px auto 0;
+            }
+            .book-info {
+                /*height: 200px;*/
+                width: 880px !important;
+                display: inline-block;
+            }
+            .other-info {
+                /*height: 200px;*/
+                width: 200px !important;
+                background-color: #3c6382;
+                color: #e9e9e9;
+                text-align:justify;
+                padding: 10px 20px 10px 10px;
+            }
+            .book-img {
+                display: inline-block;
+            }
+            .book-img img {
+                /*height: 180px;*/
+                width: 140px;
+                padding: 0px 0px;
+                margin: 10px 0px 0px 20px;
+            }
+            .book-text {
+                width: 680px;
+                display: inline-block;
+                vertical-align: top;
+                padding-top: 10px;
+                padding-left: 10px;
+                padding-bottom: 10px;
+            }
+            .book-text p {
+                text-align:justify;
+            }
+            .other-info-more a {
+                cursor: pointer;
+                color: #b8deff;
+            }
+            .other-info-more a:hover {
+                color: #ffffff;
+            }
+            .other-info-more a:active {
+                color: #b8deff;
+            }
+            .comment-select {
+                background-color: #4a69bd;
+                width: 1080px;
+                margin: 5px auto 0;
+                text-align: center;
+                padding: 5px 0px;
+            }
+            .comment-select a {
+                cursor: pointer;
+                color: #9fcdff;
+            }
+            .comment-select a:hover {
+                color: #ffffff;
+            }
+            .comment-select a:active {
+                color: #9fcdff;
+            }
+            .comment-content {
+                background-color: #6a89cc;
+                width: 1080px;
+                min-height: 150px;
+                margin: 0 auto;
+            }
+            .content-user {
+                min-height: 150px;
+                width: 150px;
+                text-align:left;
+                display: inline-block;
+            }
+            .content-user div {
+                margin-top: 20px;
+                margin-left: 20px;
+            }
+            .content-username {
+                font-size: 15px;
+                color: #b8e994;
+            }
+            .content-like {
+                font-size: 18px;
+                color: #fad390;
+            }
+            .content-like i {
+                font-size: 22px !important;
+                color: #e58e26;
+            }
+            .content-text {
+                width: 850px;
+                min-height: 150px;
+                display: inline-block;
+                text-align:justify;
+                padding: 10px 20px;
+                color: #e9e9e9;
+            }
+            .content-button{
+                width: 80px;
+                min-height: 150px;
+                display: inline-block;
+            }
+            .content-button {
+
+            }
+            .content-button .layui-btn {
+                margin: 0;
+            }
+            .content-button button {
+                display: block;
+                margin-top: 15px !important;
+                margin-left: 10px !important;
+                width: 50px;
+            }
+            .comment-selected {
+                color: #e9e9e9 !important;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="home-detail">
+            <div class="layui-row detail-content">
+                <div class="layui-col-md8 book-info">
+                    <div class="book-img">
+                        <img src="../../book/image/s33525533.jpg" />
+                    </div>
+                    <div class="book-text">
+                        <p>作者: [英] 米莉·玛洛塔 / Millie Marotta</p>
+                        <p>出版社: 后浪丨四川美术出版社</p>
+                        <p>副标题: 43种濒危动物插画集</p>
+                        <p>译者: 孙依静</p>
+                        <p>出版年: 2020-2</p>
+                        <p>ISBN: 9787541088841</p>
+                        <p maxlength=132>
+                            书籍简介: 芳踪难觅的栗腹鹭，钟爱旅行的勺嘴鹬
+                            感情专一的虎尾海马，雌雄难辨的曲纹唇鱼
+                            从海洋到森林，由沙漠至淡水
+                            芳踪难觅的栗腹鹭，钟爱旅行的勺嘴鹬
+                            感情专一的虎尾海马，雌雄难辨的曲纹唇鱼
+                            从海洋到森林，由沙漠至淡水
+                            芳踪难觅的栗腹鹭，钟爱旅行的勺嘴鹬
+                            感情专一的虎尾海马，雌雄难辨的曲纹唇鱼
+                            感情专一的虎尾海马，雌雄难辨的曲纹唇鱼
+                            感情专一的虎尾海马，雌雄难辨的曲纹唇鱼
+                            感情专一的虎尾海马，雌雄难辨的曲纹唇鱼唇鱼芳踪难觅的栗腹鹭，钟爱旅行的勺嘴鹬
+                            感情专一的虎尾海马，雌雄难辨的曲纹唇鱼
+                            从海洋到森林，由沙漠至淡水
+                            芳踪难觅的栗腹鹭，钟爱旅行的勺嘴鹬
+                            感情专一的虎尾海马，雌雄难辨的曲纹唇鱼
+                            从海洋到森林，由沙漠至淡水
+                            芳踪难觅的栗腹鹭，钟爱旅行的勺嘴鹬
+                            感情专一的虎尾海马，雌雄难辨的曲纹唇鱼
+                            感情专一的虎尾海马，雌雄难辨的曲纹唇鱼
+                            感情专一的虎尾海马，雌雄难辨的曲纹唇鱼
+                            感情专一的虎尾海马，雌雄难辨的曲纹唇鱼唇鱼
+                        </p>
+                    </div>
+                </div>
+                <div class="layui-col-md4 other-info">
+                    <span maxlength=182>
+                        资源地址
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="detail-comment">
+            <div class="layui-row comment-select">
+                <span><a class="comment-select-a" onclick="getOrderBy(this);">最新</a></span>
+                <span>/</span>
+                <span><a class="comment-select-a" onclick="getOrderBy(this);">最热</a></span>
+            </div>
+            <div class="layui-row comment-content">
+                <div class="layui-col-md2 content-user">
+                    <div class="content-username">重度书虫重度书虫重度书虫</div>
+                    <div class="content-like"><i class="layui-icon">&#xe6c6;</i>116</div>
+                </div>
+                <div class="layui-col-md8 content-text">
+                    &nbsp&nbsp&nbsp&nbsp书籍简介: 芳踪难觅的栗腹鹭，钟爱旅行的勺嘴鹬
+                    感情专一的虎尾海马，雌雄难辨的曲纹唇鱼
+                    从海洋到森林，由沙漠至淡水
+                    芳踪难觅的栗腹鹭，钟爱旅行的勺嘴鹬
+                    感情专一的虎尾海马，雌雄难辨的曲纹唇鱼
+                    从海洋到森林，由沙漠至淡水
+                    芳踪难觅的栗腹鹭，钟爱旅行的勺嘴鹬
+                </div>
+                <div class="layui-col-md2 content-button">
+                    <button class="layui-btn layui-btn-normal layui-btn-sm">编辑</button>
+                    <button class="layui-btn layui-btn-danger layui-btn-sm">删除</button>
+                    <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="setLike(this);" like="0"><i class="layui-icon">&#xe6c6;</i></button>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script src="../../js/jquery-3.4.1.min.js"></script>
+    <script src="../../layui/layui.js"></script>
+    <script type="text/javascript">
+        window.onload = function () {
+            console.log($(".other-info").parent().parent().height())
+            $(".other-info").height($(".other-info").parent().parent().height());
+        }
+        var layer;
+        layui.use('layer', function(){
+            layer = layui.layer;
+        });
+        //点赞
+        function setLike(element) {
+            var flag = $(element).attr("like");
+            if(flag == "0") {
+                $(element).attr("like", 1);
+                $(element).removeClass("layui-btn-primary");
+                $(element).addClass("layui-btn-warm");
+            } else if(flag == "1") {
+                $(element).attr("like", 0);
+                $(element).addClass("layui-btn-primary");
+                $(element).removeClass("layui-btn-warm");
+            }
+        }
+        //根据最新，最热排序
+        function getOrderBy(element) {
+            $(".comment-select-a").removeClass("comment-selected");
+            $(element).addClass("comment-selected");
+        }
+    </script>
+</html>
