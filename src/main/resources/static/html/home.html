@@ -141,8 +141,8 @@
                 </div>
                 <div class="layui-col-md2 content-account">
                     <div class="content-account-text">
-                        <div><a>登录</a></div>
-                        <div><a>注册</a></div>
+                        <div><a onclick="openLogin();">登录</a></div>
+                        <div><a onclick="openRegister();">注册</a></div>
                     </div>
                 </div>
             </div>
@@ -306,6 +306,7 @@
         layui.use('layer', function(){
             layer = layui.layer;
         });
+        //查看详情
         function getMoreInfo() {
             layer.open({
                 type: 2,
@@ -315,6 +316,30 @@
                 area: ['1180px', '800px'],
                 // offset: ['50%', '50%'],
                 content: 'detail.html' //iframe的url
+            });
+        }
+        //打开登录页面
+        function openLogin() {
+            layer.open({
+                type: 2,
+                title: ['登录', 'background-color: #3c6382;color:#e9e9e9;'],
+                shadeClose: true,
+                shade: 0.8,
+                area: ['500px', '380px'],
+                // offset: ['50%', '50%'],
+                content: 'login.html' //iframe的url
+            });
+        }
+        //打开注册页面
+        function openRegister() {
+            layer.open({
+                type: 2,
+                title: ['注册', 'background-color: #3c6382;color:#e9e9e9;'],
+                shadeClose: true,
+                shade: 0.8,
+                area: ['500px', '500px'],
+                // offset: ['50%', '50%'],
+                content: 'register.html' //iframe的url
             });
         }
     </script>

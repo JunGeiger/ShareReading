@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link type="text/css" rel="stylesheet" href="../../layui/css/layui.css" />
+    <style type="text/css">
+        body {
+            background-color: #D8E6E7;
+            padding-top: 50px;
+        }
+        .layui-form {
+            width: 400px;
+            padding: 0;
+            margin: 0;
+        }
+        .layui-input {
+            width: 300px;
+        }
+        .submit-content {
+            text-align: center;
+        }
+        .submit-button {
+            width: 300px;
+        }
+        .form-password{
+            margin-top: 20px;
+        }
+        .verify-email {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<form class="layui-form" action="">
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <div class="layui-input-block">
+            <input type="text" name="username" required  lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item form-password">
+        <label class="layui-form-label"></label>
+        <div class="layui-input-inline">
+            <input type="email" name="password" required lay-verify="required" placeholder="请输入邮箱" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-inline">
+            <input type="email" name="password" required lay-verify="required" placeholder="请输入邮箱验证码" autocomplete="off" class="layui-input" style="width: 200px;margin-left: 110px;">
+        </div>
+        <div class="layui-input-inline" style="text-align: right">
+            <a class="verify-email">验证邮箱</a>
+        </div>
+    </div>
+    <div class="layui-form-item form-password">
+        <label class="layui-form-label"></label>
+        <div class="layui-input-inline">
+            <input type="password" name="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item form-password">
+        <label class="layui-form-label"></label>
+        <div class="layui-input-inline">
+            <input type="password" name="password" required lay-verify="required" placeholder="请再次输入密码" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item submit-content">
+        <div class="layui-input-block">
+            <button class="layui-btn layui-btn-normal submit-button" lay-submit lay-filter="formDemo">注册</button>
+        </div>
+    </div>
+</form>
+</body>
+<script src="../../js/jquery-3.4.1.min.js"></script>
+<script src="../../layui/layui.js"></script>
+<script type="text/javascript">
+    var layer;
+    var form;
+    layui.use(['layer', 'form'], function(){
+        layer = layui.layer;
+        form = layui.form;
+        //监听提交
+        form.on('submit(formDemo)', function(data){
+            layer.msg(JSON.stringify(data.field));
+            return false;
+        });
+    });
+</script>
+</html>
