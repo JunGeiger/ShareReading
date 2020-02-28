@@ -222,7 +222,7 @@
                     芳踪难觅的栗腹鹭，钟爱旅行的勺嘴鹬
                 </div>
                 <div class="layui-col-md2 content-button">
-                    <button class="layui-btn layui-btn-normal layui-btn-sm">编辑</button>
+                    <button class="layui-btn layui-btn-normal layui-btn-sm" onclick="modifyComment();">编辑</button>
                     <button class="layui-btn layui-btn-danger layui-btn-sm">删除</button>
                     <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="setLike(this);" like="0"><i class="layui-icon">&#xe6c6;</i></button>
                 </div>
@@ -257,6 +257,20 @@
         function getOrderBy(element) {
             $(".comment-select-a").removeClass("comment-selected");
             $(element).addClass("comment-selected");
+        }
+
+        //打开评论编辑窗口
+        function modifyComment() {
+            layer.open({
+                type: 2,
+                title: ['注册', 'background-color: #3c6382;color:#e9e9e9;'],
+                shadeClose: false,
+                shade: 0.8,
+                area: ['500px', '500px'],
+                // offset: ['50%', '50%'],
+                content: 'modifyComments.html', //iframe的url
+                move: false
+            });
         }
     </script>
 </html>

@@ -27,10 +27,21 @@
                 margin-top: 20px;
             }
             .forget-password {
+                line-height: 38px;
                 cursor: pointer;
             }
             .verify-email {
+                line-height: 38px;
                 cursor: pointer;
+            }
+            .verification {
+                text-align: right;
+                width: 90px !important;
+                margin-left: 110px !important;
+                margin-right: 0px !important;
+            }
+            .modify-password {
+                margin-top: 20px;
             }
         </style>
     </head>
@@ -82,13 +93,13 @@
                 <div class="layui-input-inline">
                     <input type="email" name="password" required lay-verify="required" placeholder="请输入邮箱验证码" autocomplete="off" class="layui-input" style="width: 200px;margin-left: 110px;">
                 </div>
-                <div class="layui-input-inline" style="text-align: right">
-                    <a class="verify-email">验证邮箱</a>
+                <div class="layui-input-inline verification">
+                    <a class="verify-email" onclick="countDownTimer();">获取验证码</a>
                 </div>
             </div>
             <div class="layui-form-item submit-content">
                 <div class="layui-input-block">
-                    <button class="layui-btn layui-btn-normal submit-button" lay-submit lay-filter="formDemo">修改密码</button>
+                    <button class="layui-btn layui-btn-normal submit-button modify-password" lay-submit lay-filter="formDemo">修改密码</button>
                 </div>
             </div>
         </form>
@@ -112,6 +123,23 @@
             $("#login").addClass("layui-hide");
             $("#updatePassword").removeClass("layui-hide");
             $("body").prop("style", "padding-top: 10px;");
+        }
+        // 获取验证码
+        function countDownTimer(){
+            var second = 60;
+            var timer = setInterval(function(){
+                second -= 1;
+                if(second >0 ){
+                    $('.verify-email').attr("disabled",true);
+                    $('.verify-email').html("重新发送(" + second + ")");
+                }else{
+                    second = 60;
+                    clearInterval(timer);
+                    $('.verify-email').removeAttr("disabled");
+                    $('.verify-email').html("获取验证码");
+                    return;
+                }
+            },1000);
         }
     </script>
 </html>

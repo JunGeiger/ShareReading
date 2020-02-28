@@ -121,6 +121,30 @@
             .home-middle {
                 margin-top: 10px;
             }
+            .management {
+                margin-top: 5px;
+                height: 40px !important;
+            }
+            .management .top-content{
+                background-color: #009688;
+                height: 40px;
+                width: 1280px;
+                margin: 0 auto;
+            }
+            .management-button {
+                text-align: center;
+                margin-top: 10px;
+                font-size: 15px;
+            }
+            .management-button a {
+                cursor: pointer;
+            }
+            .management-button a:hover {
+                color: #FFFFFF;
+            }
+            .management-button a:active {
+                color: #d6d6d6;
+            }
         </style>
     </head>
     <body>
@@ -147,6 +171,28 @@
                 </div>
             </div>
         </div>
+        <div class="home-top management">
+            <div class="layui-row top-content ">
+                <div class="layui-col-md2 management-button">
+                    <a>用户管理</a>
+                </div>
+                <div class="layui-col-md2 management-button">
+                    <a>权限管理</a>
+                </div>
+                <div class="layui-col-md2 management-button">
+                    <a>书籍管理</a>
+                </div>
+                <div class="layui-col-md2 management-button">
+
+                </div>
+                <div class="layui-col-md2 management-button">
+
+                </div>
+                <div class="layui-col-md2 management-button">
+
+                </div>
+            </div>
+        </div>
         <div class="home-middle">
             <div class="layui-row middle-content">
                 <div class="layui-col-md8 book-info">
@@ -154,9 +200,9 @@
                         <img src="../book/image/s33525533.jpg" />
                     </div>
                     <div class="book-text">
+                        <p>书名: 43种濒危动物插画集</p>
                         <p>作者: [英] 米莉·玛洛塔 / Millie Marotta</p>
                         <p>出版社: 后浪丨四川美术出版社</p>
-                        <p>副标题: 43种濒危动物插画集</p>
                         <p>译者: 孙依静</p>
                         <p>出版年: 2020-2</p>
                         <p>ISBN: 9787541088841</p>
@@ -191,9 +237,9 @@
                         <img src="../book/image/s33525533.jpg" />
                     </div>
                     <div class="book-text">
+                        <p>书名: 43种濒危动物插画集</p>
                         <p>作者: [英] 米莉·玛洛塔 / Millie Marotta</p>
                         <p>出版社: 后浪丨四川美术出版社</p>
-                        <p>副标题: 43种濒危动物插画集</p>
                         <p>译者: 孙依静</p>
                         <p>出版年: 2020-2</p>
                         <p>ISBN: 9787541088841</p>
@@ -228,9 +274,9 @@
                         <img src="../book/image/s33525533.jpg" />
                     </div>
                     <div class="book-text">
+                        <p>书名: 43种濒危动物插画集</p>
                         <p>作者: [英] 米莉·玛洛塔 / Millie Marotta</p>
                         <p>出版社: 后浪丨四川美术出版社</p>
-                        <p>副标题: 43种濒危动物插画集</p>
                         <p>译者: 孙依静</p>
                         <p>出版年: 2020-2</p>
                         <p>ISBN: 9787541088841</p>
@@ -265,9 +311,9 @@
                         <img src="../book/image/s33525533.jpg" />
                     </div>
                     <div class="book-text">
+                        <p>书名: 43种濒危动物插画集</p>
                         <p>作者: [英] 米莉·玛洛塔 / Millie Marotta</p>
                         <p>出版社: 后浪丨四川美术出版社</p>
-                        <p>副标题: 43种濒危动物插画集</p>
                         <p>译者: 孙依静</p>
                         <p>出版年: 2020-2</p>
                         <p>ISBN: 9787541088841</p>
@@ -315,7 +361,8 @@
                 shade: 0.8,
                 area: ['1180px', '800px'],
                 // offset: ['50%', '50%'],
-                content: 'detail.html' //iframe的url
+                content: 'detail.html',//iframe的url
+                move: false
             });
         }
         //打开登录页面
@@ -323,11 +370,12 @@
             layer.open({
                 type: 2,
                 title: ['登录', 'background-color: #3c6382;color:#e9e9e9;'],
-                shadeClose: true,
+                shadeClose: false,
                 shade: 0.8,
-                area: ['500px', '380px'],
+                area: ['500px', '400px'],
                 // offset: ['50%', '50%'],
-                content: 'login.html' //iframe的url
+                content: 'login.html', //iframe的url
+                move: false
             });
         }
         //打开注册页面
@@ -335,11 +383,12 @@
             layer.open({
                 type: 2,
                 title: ['注册', 'background-color: #3c6382;color:#e9e9e9;'],
-                shadeClose: true,
+                shadeClose: false,
                 shade: 0.8,
                 area: ['500px', '500px'],
                 // offset: ['50%', '50%'],
-                content: 'register.html' //iframe的url
+                content: 'register.html', //iframe的url
+                move: false
             });
         }
     </script>
