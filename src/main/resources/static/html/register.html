@@ -44,18 +44,18 @@
     <div class="layui-form-item">
         <label class="layui-form-label"></label>
         <div class="layui-input-block">
-            <input type="text" name="username" required  lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+            <input type="text" name="username" id="username" required  lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item form-password">
         <label class="layui-form-label"></label>
         <div class="layui-input-inline">
-            <input type="email" name="password" required lay-verify="required" placeholder="请输入邮箱" autocomplete="off" class="layui-input">
+            <input type="email" name="email" id="email" required lay-verify="required" placeholder="请输入邮箱" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
         <div class="layui-input-inline">
-            <input type="email" name="password" required lay-verify="required" placeholder="请输入邮箱收到的验证码" autocomplete="off" class="layui-input" style="width: 200px;margin-left: 110px;">
+            <input type="text" name="validateCode" id="validateCode" required lay-verify="required" placeholder="请输入邮箱收到的验证码" autocomplete="off" class="layui-input" style="width: 200px;margin-left: 110px;">
         </div>
         <div class="layui-input-inline verification">
             <a class="verify-email" onclick="countDownTimer();">获取验证码</a>
@@ -64,13 +64,13 @@
     <div class="layui-form-item form-password">
         <label class="layui-form-label"></label>
         <div class="layui-input-inline">
-            <input type="password" name="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+            <input type="password" name="password" id="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item form-password">
         <label class="layui-form-label"></label>
         <div class="layui-input-inline">
-            <input type="password" name="password" required lay-verify="required" placeholder="请再次输入密码" autocomplete="off" class="layui-input">
+            <input type="password" name="rePassword" id="rePassword" required lay-verify="required" placeholder="请再次输入密码" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item submit-content">
@@ -85,6 +85,7 @@
 <script type="text/javascript">
     var layer;
     var form;
+    var ValidateCodeTag = 0;
     layui.use(['layer', 'form'], function(){
         layer = layui.layer;
         form = layui.form;
@@ -97,20 +98,60 @@
 
     // 获取验证码
     function countDownTimer(){
+        if($("#email").val() == "") {
+            layer.msg("请填写邮箱！", {shift: -1, time: 1000, icon: 2}, function(){
+
+            });
+        }
         var second = 60;
         var timer = setInterval(function(){
             second -= 1;
             if(second >0 ){
                 $('.verify-email').attr("disabled",true);
                 $('.verify-email').html("重新发送(" + second + ")");
-            }else{
+                ValidateCodeTag = 1;
+            } else {
                 second = 60;
                 clearInterval(timer);
                 $('.verify-email').removeAttr("disabled");
                 $('.verify-email').html("获取验证码");
+                ValidateCodeTag = 0;
                 return;
             }
         },1000);
+        if(ValidateCodeTag == 0) {
+            sendValidateCode($("#email").val());
+        }
+    }
+
+    //发送验证码
+    function sendValidateCode(eMail) {
+        var formdata = {};
+        formdata.eMail = eMail;
+        $.ajax({
+            type : 'get',
+            url : '/user/getValidateCode?eMail='+eMail,
+            success : function(data) {
+                if(data.success){
+                    if(data.message.length > 20) {
+                        //询问框
+                        layer.confirm(data.message, {
+                            btn: ['我知道了'] //按钮
+                        }, function(index){
+                            layer.close(index);
+                        });
+                    } else {
+                        layer.msg(data.message, {shift: -1, time: 1000, icon: 1}, function(){
+
+                        });
+                    }
+                }else{
+                    layer.msg(data.message, {shift: -1, time: 1000, icon: 2}, function(){
+
+                    });
+                }
+            }
+        });
     }
 </script>
 </html>
