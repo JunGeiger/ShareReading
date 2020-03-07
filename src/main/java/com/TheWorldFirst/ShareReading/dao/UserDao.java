@@ -29,4 +29,26 @@ public interface UserDao {
      */
     @Select("SELECT * FROM email_code WHERE eMail = #{eMail} AND TIMESTAMPDIFF(HOUR, createTime, NOW()) < 24")
     HashMap<String, Object> getValidateCode(@Param("eMail")String eMail);
+
+    /**
+     * 用户注册
+     * @param user
+     */
+    void register(@Param("params")HashMap<String, Object> user);
+
+    /**
+     * 根据用户名查找用户
+     * @param username
+     * @return
+     */
+    @Select("SELECT * FROM user WHERE user_name = #{username}")
+    HashMap<String, Object> getUserByName(@Param("username") String username);
+
+    /**
+     * 根据邮箱查找用户
+     * @param email
+     * @return
+     */
+    @Select("SELECT * FROM user WHERE user_email = #{email}")
+    HashMap<String, Object> getUserByEmail(@Param("email") String email);
 }

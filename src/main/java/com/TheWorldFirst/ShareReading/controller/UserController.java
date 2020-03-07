@@ -20,7 +20,6 @@ public class UserController {
 
     @GetMapping("/getValidateCode")
     public HashMap<String, Object> getValidateCode(@RequestParam("eMail") String eMail) {
-
         return userService.getValidateCode(eMail);
     }
 }

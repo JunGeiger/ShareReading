@@ -23,7 +23,39 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public HashMap<String, Object> register(HashMap<String, Object> user) {
-        return null;
+        HashMap<String, Object> result = new HashMap<>();
+        try {
+            HashMap<String, Object> emailCode = userDao.getValidateCode((String) user.get("email"));
+            HashMap<String, Object> existUserByName  = userDao.getUserByName((String) user.get("username"));
+            HashMap<String, Object> existUserByEmail  = userDao.getUserByEmail((String) user.get("email"));
+            if (existUserByName != null) {
+                result.put("success", false);
+                result.put("message", "用户名已存在！");
+            } else if (existUserByEmail != null){
+                result.put("success", false);
+                result.put("message", "邮箱已被注册！");
+            } else {
+                if (emailCode != null) {
+                    if(emailCode.get("validateCode").equals(user.get("validateCode"))) {
+                        userDao.register(user);
+                        result.put("success", true);
+                        result.put("message", "注册成功！");
+                    } else {
+                        result.put("success", false);
+                        result.put("message", "验证码错误！");
+                    }
+                } else {
+                    result.put("success", false);
+                    result.put("message", "请重新获取验证码！");
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("success", false);
+            result.put("message", "注册失败，请联系管理员！");
+        }
+        return result;
     }
 
     @Override
