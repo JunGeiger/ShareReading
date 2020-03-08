@@ -7,9 +7,6 @@ import com.TheWorldFirst.ShareReading.util.RandomCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 
 @Service
@@ -54,6 +51,60 @@ public class UserServiceImpl implements UserService {
             e.printStackTrace();
             result.put("success", false);
             result.put("message", "注册失败，请联系管理员！");
+        }
+        return result;
+    }
+
+    @Override
+    public HashMap<String, Object> updatePassword(HashMap<String, Object> user) {
+        HashMap<String, Object> result = new HashMap<>();
+        try {
+            HashMap<String, Object> emailCode = userDao.getValidateCode((String) user.get("email"));
+            HashMap<String, Object> existUserByEmail  = userDao.getUserByEmail((String) user.get("email"));
+            if (existUserByEmail == null){
+                result.put("success", false);
+                result.put("message", "该邮箱未注册！");
+                return result;
+            } else if (emailCode == null) {
+                result.put("success", false);
+                result.put("message", "请重新获取验证码！");
+                return result;
+            } else if(emailCode.get("validateCode").equals(user.get("validateCode"))) {
+                user.put("id", existUserByEmail.get("id"));
+                userDao.updatePassword(user);
+                result.put("success", true);
+                result.put("message", "密码修改成功！");
+                return result;
+            } else {
+                result.put("success", false);
+                result.put("message", "验证码错误！");
+                return result;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("success", false);
+            result.put("message", "修改失败，请联系管理员！");
+        }
+        return result;
+    }
+
+    @Override
+    public HashMap<String, Object> existUserByEmail(String eMail) {
+        HashMap<String, Object> result = new HashMap<>();
+        try {
+            HashMap<String, Object> existUserByEmail  = userDao.getUserByEmail(eMail);
+            if(existUserByEmail != null) {
+                result.put("success", true);
+                result.put("message", "查询成功！");
+            } else {
+                result.put("success", false);
+                result.put("message", "该邮箱还未注册！");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("success", false);
+            result.put("message", "查询失败，请联系管理员！");
         }
         return result;
     }

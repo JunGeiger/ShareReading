@@ -88,7 +88,7 @@
     </div>
     <div class="layui-form-item submit-content">
         <div class="layui-input-block">
-            <button class="layui-btn layui-btn-normal submit-button" lay-submit lay-filter="formDemo">注册</button>
+            <button class="layui-btn layui-btn-normal submit-button" lay-submit lay-filter="register">注册</button>
         </div>
     </div>
 </form>
@@ -98,10 +98,12 @@
 <script type="text/javascript">
     var layer;
     var form;
-    var ValidateCodeTag = 0;
+    var index;
     layui.use(['layer', 'form'], function(){
         layer = layui.layer;
         form = layui.form;
+        index = parent.layer.getFrameIndex(window.name);
+        //parent.layer.close(index);
         //监听提交
         // /^[A-Za-z0-9]{4,10}$/ /^[0-9]*$/ 用户名验证：只能包括数字、字母，一次性不能修改，4-16个字符
         // /(?!.*\s)(?!^[\u4e00-\u9fa5]+$)(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^.{8,16}$/ 密码验证：8-16个字符,不包含空格,必须包含数字,字母或字符至少两种
@@ -124,9 +126,10 @@
                 }
             }
         });
-        form.on('submit(formDemo)', function(data){
+        form.on('submit(register)', function(data){
             console.log(JSON.stringify(data.field));
             if(register(data.field) == true) {
+                parent.layer.close(index);
                 return true;
             } else {
                 return false;
@@ -145,26 +148,22 @@
             second -= 1;
             if(second >0 ){
                 $('.verify-email').attr("disabled",true);
+                $('.verify-email').prop("style", "pointer-events: none;");
                 $('.verify-email').html("重新发送(" + second + ")");
-                ValidateCodeTag = 1;
             } else {
                 second = 60;
                 clearInterval(timer);
                 $('.verify-email').removeAttr("disabled");
+                $('.verify-email').prop("style", "");
                 $('.verify-email').html("获取验证码");
-                ValidateCodeTag = 0;
                 return;
             }
         },1000);
-        if(ValidateCodeTag == 0) {
-            sendValidateCode($("#email").val());
-        }
+        sendValidateCode($("#email").val());
     }
 
     //发送验证码
     function sendValidateCode(eMail) {
-        var formdata = {};
-        formdata.eMail = eMail;
         $.ajax({
             type : 'get',
             url : '/user/getValidateCode?eMail='+eMail,
@@ -192,23 +191,28 @@
     }
 
     function register(params) {
+        var flag;
         $.ajax({
             type : 'post',
+            async : false,
             url : '/user/register',
             contentType : 'application/json;charset=UTF-8',
             data : JSON.stringify(params),
             success : function(data) {
                 if(data.success){
-                    layer.msg(data.message, {shift: -1, time: 1000, icon: 1}, function(){
+                    parent.layer.msg(data.message, {shift: -1, time: 1000, icon: 1}, function(){
                         return true;
                     });
+                    flag = true;
                 }else{
-                    layer.msg(data.message, {shift: -1, time: 1000, icon: 2}, function(){
+                    parent.layer.msg(data.message, {shift: -1, time: 1000, icon: 2}, function(){
                         return false;
                     });
+                    flag = false;
                 }
             }
         });
+        return flag;
     }
 </script>
 </html>

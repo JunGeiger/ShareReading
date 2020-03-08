@@ -7,4 +7,12 @@
         VALUES
         (#{params.username}, #{params.email}, #{params.password}, NOW())
     </insert>
+    <update id="updatePassword" parameterType="java.util.HashMap">
+        UPDATE `user`
+        SET
+            user_password = #{params.password},
+            updateTime = NOW()
+        WHERE
+            id = #{params.id}
+    </update>
 </mapper>

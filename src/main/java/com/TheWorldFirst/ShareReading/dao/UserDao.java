@@ -51,4 +51,10 @@ public interface UserDao {
      */
     @Select("SELECT * FROM user WHERE user_email = #{email}")
     HashMap<String, Object> getUserByEmail(@Param("email") String email);
+
+    /**
+     * 修改密码
+     * @param user
+     */
+    void updatePassword(@Param("params")HashMap<String, Object> user);
 }

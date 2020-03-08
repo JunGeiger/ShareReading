@@ -16,4 +16,18 @@ public interface UserService {
      * @return
      */
     HashMap<String, Object> getValidateCode(String eMail);
+
+    /**
+     * 修改密码
+     * @param user
+     * @return
+     */
+    HashMap<String, Object> updatePassword(HashMap<String, Object> user);
+
+    /**
+     * 根据邮箱获取用户
+     * @param eMail
+     * @return
+     */
+    HashMap<String, Object> existUserByEmail(String eMail);
 }
