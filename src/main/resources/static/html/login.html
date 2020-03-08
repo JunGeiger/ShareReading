@@ -152,6 +152,17 @@
                     return false;
                 }
             });
+
+            //监听提交
+            form.on('submit(login)', function(data){
+                console.log(JSON.stringify(data.field));
+                if(login(data.field)) {
+                    parent.layer.close(index);
+                    return true;
+                } else {
+                    return false;
+                }
+            });
         });
 
         //忘记密码-->修改密码
@@ -256,6 +267,32 @@
                         parent.layer.msg(data.message, {shift: -1, time: 1000, icon: 1}, function(){
                             return true;
                         });
+                        flag = true;
+                    }else{
+                        parent.layer.msg(data.message, {shift: -1, time: 1000, icon: 2}, function(){
+                            return false;
+                        });
+                        flag = false;
+                    }
+                }
+            });
+            return flag;
+        }
+
+        function login(params) {
+            var flag;
+            $.ajax({
+                type : 'post',
+                async : false,
+                url : '/user/login',
+                contentType : 'application/json;charset=UTF-8',
+                data : JSON.stringify(params),
+                success : function(data) {
+                    if(data.success){
+                        parent.layer.msg(data.message, {shift: -1, time: 1000, icon: 1}, function(){
+                            return true;
+                        });
+                        parent.user = data.user;
                         flag = true;
                     }else{
                         parent.layer.msg(data.message, {shift: -1, time: 1000, icon: 2}, function(){
