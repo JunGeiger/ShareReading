@@ -31,10 +31,42 @@ public interface UserDao {
     HashMap<String, Object> getValidateCode(@Param("eMail")String eMail);
 
     /**
+     * 根据用户ID删除所有相关SESSION
+     * @param id
+     * @return
+     */
+    @Delete("DELETE FROM session WHERE user_id = #{id}")
+    void deleteLoginSession(@Param("id") String id);
+
+    /**
+     * 根据用户ID和session查询登录是否有效
+     * @param id
+     * @return
+     */
+    @Select("SELECT * FROM session WHERE user_id = #{id} AND BINARY session = #{session} AND TIMESTAMPDIFF(HOUR, createTime, NOW()) < 8")
+    HashMap<String, Object> getLoginSession(@Param("id")String id, @Param("session")String session);
+
+    /**
+     * 存入session
+     * @param id
+     * @param session
+     */
+    @Insert("INSERT INTO session (user_id, session, createTime) VALUES (#{id}, #{session}, NOW())")
+    void saveLoginSession(@Param("id") Long id, @Param("session")String session);
+
+    /**
      * 用户注册
      * @param user
      */
     void register(@Param("params")HashMap<String, Object> user);
+
+    /**
+     * 根据用户名查找用户(严格区分大小写)
+     * @param username
+     * @return
+     */
+    @Select("SELECT * FROM user WHERE BINARY user_name = #{username}")
+    HashMap<String, Object> getUserByNameBinary(@Param("username") String username);
 
     /**
      * 根据用户名查找用户
@@ -57,4 +89,12 @@ public interface UserDao {
      * @param user
      */
     void updatePassword(@Param("params")HashMap<String, Object> user);
+
+    /**
+     * 根据id获取用户信息（权限,无密码）
+     * @param id
+     * @return
+     */
+    @Select("SELECT u.id, u.user_name, u.user_email, l.`level` FROM `user` AS u LEFT JOIN role AS r ON u.id = r.user_id LEFT JOIN `level` AS l ON l.id = r.level_id WHERE u.id = #{id} ")
+    HashMap<String, Object> getUserInfo(@Param("id") String id);
 }

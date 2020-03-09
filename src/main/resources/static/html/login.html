@@ -60,13 +60,13 @@
             <div class="layui-form-item">
                 <label class="layui-form-label"></label>
                 <div class="layui-input-block">
-                    <input type="text" name="username" id="login-username" lay-verify="username" placeholder="用户名/邮箱" maxlength="16" autocomplete="off" class="layui-input">
+                    <input type="text" name="username" id="login-username" lay-verify="required" lay-reqText="用户名/邮箱不能为空！" placeholder="用户名/邮箱" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item form-password">
                 <label class="layui-form-label"></label>
                 <div class="layui-input-inline">
-                    <input type="password" name="password" id="login-password" lay-verify="password" placeholder="密码" autocomplete="off" class="layui-input">
+                    <input type="password" name="password" id="login-password" lay-verify="required" lay-reqText="密码不能为空" placeholder="密码" maxlength="16" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
@@ -144,7 +144,7 @@
             });
             //监听提交
             form.on('submit(updatePassword)', function(data){
-                console.log(JSON.stringify(data.field));
+                // console.log(JSON.stringify(data.field));
                 if(updatePassword(data.field)) {
                     goLogin(data.field);
                     return true;
@@ -155,7 +155,7 @@
 
             //监听提交
             form.on('submit(login)', function(data){
-                console.log(JSON.stringify(data.field));
+                // console.log(JSON.stringify(data.field));
                 if(login(data.field)) {
                     parent.layer.close(index);
                     return true;
@@ -292,7 +292,13 @@
                         parent.layer.msg(data.message, {shift: -1, time: 1000, icon: 1}, function(){
                             return true;
                         });
-                        parent.user = data.user;
+                        // console.log(data);
+                        window.localStorage.setItem("shareReading_user_email", data.user.user_email);
+                        window.localStorage.setItem("shareReading_user_level", data.user.level);
+                        window.localStorage.setItem("shareReading_user_name", data.user.user_name);
+                        window.localStorage.setItem("shareReading_user_id", data.user.id);
+                        window.localStorage.setItem("shareReading_user_session", data.user.session);
+                        window.localStorage.setItem("shareReading_user_session_time", data.user.time);
                         flag = true;
                     }else{
                         parent.layer.msg(data.message, {shift: -1, time: 1000, icon: 2}, function(){

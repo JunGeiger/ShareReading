@@ -190,8 +190,9 @@
                 </div>
                 <div class="layui-col-md2 content-account">
                     <div class="content-account-text">
-                        <div><a onclick="openLogin();">登录</a></div>
-                        <div><a onclick="openRegister();">注册</a></div>
+                        <div><a onclick="openLogin();" id="loginName">登录</a></div>
+                        <div><a onclick="openRegister();" id="register">注册</a></div>
+                        <div><a onclick="logout();" id="logout" style="display: none;">退出</a></div>
                     </div>
                 </div>
             </div>
@@ -261,6 +262,28 @@
         var layer;
         layui.use('layer', function(){
             layer = layui.layer;
+            var params = {};
+            params.id = window.localStorage.getItem("shareReading_user_id");
+            params.session = window.localStorage.getItem("shareReading_user_session");
+            // console.log(params)
+            if(params.id == "undefined") {
+
+            } else {
+                var sessionTime = window.localStorage.getItem("shareReading_user_session_time");
+                var date = new Date();
+                if(((date.getTime() - parseInt(sessionTime))/1000.0/60) > 120) {
+                    sessionLogin(params);
+                } else {
+                    var username = window.localStorage.getItem("shareReading_user_name");
+                    if(username.length > 10) {
+                        username = username.substr(0, 10) + "...";
+                    }
+                    $("#loginName").html(username);
+                    $("#loginName").prop("onclick", "return false;");
+                    $("#register").hide();
+                    $("#logout").show();
+                }
+            }
         });
         //查看详情
         function getMoreInfo() {
@@ -285,7 +308,12 @@
                 area: ['500px', '430px'],
                 // offset: ['50%', '50%'],
                 content: 'login.html', //iframe的url
-                move: false
+                move: false,
+                end: function () {
+                    setTimeout(function () {
+                        parent.location.reload();
+                    },1500);
+                }
             });
         }
         //打开注册页面
@@ -300,6 +328,63 @@
                 content: 'register.html', //iframe的url
                 move: false
             });
+        }
+        function sessionLogin(params) {
+            $.ajax({
+                type : 'post',
+                async : false,
+                url : '/user/sessionLogin',
+                contentType : 'application/json;charset=UTF-8',
+                data : JSON.stringify(params),
+                success : function(data) {
+                    if(data.success){
+                        // layer.msg(data.message, {shift: -1, time: 1000, icon: 1}, function(){
+                        //
+                        // });
+                        // console.log(data);
+                        window.localStorage.setItem("shareReading_user_email", data.user.user_email);
+                        window.localStorage.setItem("shareReading_user_level", data.user.level);
+                        window.localStorage.setItem("shareReading_user_name", data.user.user_name);
+                        window.localStorage.setItem("shareReading_user_id", data.user.id);
+                        window.localStorage.setItem("shareReading_user_session", data.user.session);
+                        window.localStorage.setItem("shareReading_user_session_time", data.user.time);
+                        var username = window.localStorage.getItem("shareReading_user_name");
+                        if(username.length > 6) {
+                            username = username.substr(0, 6) + "...";
+                        }
+                        $("#loginName").html(username);
+                        $("#loginName").prop("onclick", "return false;");
+                        $("#register").hide();
+                        $("#logout").show();
+                    }else{
+                        // layer.msg(data.message, {shift: -1, time: 1000, icon: 2}, function(){
+                        //
+                        // });
+                        window.localStorage.setItem("shareReading_user_email", undefined);
+                        window.localStorage.setItem("shareReading_user_level", undefined);
+                        window.localStorage.setItem("shareReading_user_name", undefined);
+                        window.localStorage.setItem("shareReading_user_id", undefined);
+                        window.localStorage.setItem("shareReading_user_session", undefined);
+                        window.localStorage.setItem("shareReading_user_session_time", undefined);
+                        $("#loginName").html("登录");
+                        $("#loginName").onclick = openLogin();
+                        $("#register").show();
+                    }
+                }
+            });
+        }
+
+        function logout() {
+            window.localStorage.setItem("shareReading_user_email", undefined);
+            window.localStorage.setItem("shareReading_user_level", undefined);
+            window.localStorage.setItem("shareReading_user_name", undefined);
+            window.localStorage.setItem("shareReading_user_id", undefined);
+            window.localStorage.setItem("shareReading_user_session", undefined);
+            window.localStorage.setItem("shareReading_user_session_time", undefined);
+            $("#loginName").html("登录");
+            $("#loginName").onclick = openLogin();
+            $("#register").show();
+            $("#logout").hide();
         }
     </script>
 </html>

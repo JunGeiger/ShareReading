@@ -1,14 +1,11 @@
 package com.TheWorldFirst.ShareReading.service.ServiceImpl;
 
-import com.TheWorldFirst.ShareReading.dao.UserDao;
 import com.TheWorldFirst.ShareReading.service.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
 
 @Service
 public class MailServiceImpl implements MailService {

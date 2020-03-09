@@ -4,9 +4,12 @@ import com.TheWorldFirst.ShareReading.dao.UserDao;
 import com.TheWorldFirst.ShareReading.service.MailService;
 import com.TheWorldFirst.ShareReading.service.UserService;
 import com.TheWorldFirst.ShareReading.util.RandomCode;
+import com.TheWorldFirst.ShareReading.util.SessionRandomCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.HashMap;
 
 @Service
@@ -18,7 +21,10 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private MailService mailService;
 
+    private Date date = new Date();
+
     @Override
+    @Transactional
     public HashMap<String, Object> register(HashMap<String, Object> user) {
         HashMap<String, Object> result = new HashMap<>();
         try {
@@ -56,6 +62,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public HashMap<String, Object> updatePassword(HashMap<String, Object> user) {
         HashMap<String, Object> result = new HashMap<>();
         try {
@@ -110,6 +117,83 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
+    public HashMap<String, Object> login(HashMap<String, Object> user) {
+        HashMap<String, Object> result = new HashMap<>();
+        try {
+            HashMap<String, Object> userInfo = null;
+            HashMap<String, Object> existUserByName  = userDao.getUserByNameBinary((String) user.get("username"));
+            HashMap<String, Object> existUserByEmail  = userDao.getUserByEmail((String) user.get("username"));
+            if(existUserByName == null && existUserByEmail == null) {
+                result.put("success", false);
+                result.put("message", "用户名或邮箱填写错误！");
+            } else {
+                if(existUserByName != null) {
+                    userInfo = existUserByName;
+                } else if (existUserByEmail != null) {
+                    userInfo = existUserByEmail;
+                }
+                if (userInfo != null) {
+                    if (userInfo.get("user_password").equals(user.get("password"))) {
+                        String session = SessionRandomCode.getSessionRandomCode(32);
+                        HashMap<String, Object> userInfoRole = userDao.getUserInfo(String.valueOf(userInfo.get("id")));
+                        userDao.deleteLoginSession(String.valueOf(userInfoRole.get("id")));
+                        userDao.saveLoginSession((Long)userInfoRole.get("id"),session );
+                        userInfoRole.put("session", session);
+                        userInfoRole.put("time", date.getTime());
+                        result.put("user", userInfoRole);
+                        result.put("success", true);
+                        result.put("message", "登录成功！");
+                    } else {
+                        result.put("success", false);
+                        result.put("message", "密码错误！");
+                    }
+                } else {
+                    result.put("success", false);
+                    result.put("message", "登录失败！");
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("success", false);
+            result.put("message", "登录失败，请联系管理员！");
+        }
+        return result;
+    }
+
+    @Override
+    @Transactional
+    public HashMap<String, Object> sessionLogin(HashMap<String, Object> user) {
+        HashMap<String, Object> result = new HashMap<>();
+        try {
+//
+            HashMap<String, Object> sessionInfo = userDao.getLoginSession((String) user.get("id"), (String) user.get("session"));
+            userDao.deleteLoginSession((String)user.get("id"));
+            if (sessionInfo != null) {
+                String session = SessionRandomCode.getSessionRandomCode(32);
+                HashMap<String, Object> userInfo = userDao.getUserInfo((String) user.get("id"));
+                userDao.saveLoginSession((Long)userInfo.get("id"), session);
+                userInfo.put("session", session);
+                userInfo.put("time", date.getTime());
+                result.put("user", userInfo);
+                result.put("success", true);
+                result.put("message", "登录成功！");
+            } else {
+                result.put("success", false);
+                result.put("message", "登录失败！");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("success", false);
+            result.put("message", "登录失败，请联系管理员！");
+        }
+        return result;
+    }
+
+    @Override
+    @Transactional
     public HashMap<String, Object> getValidateCode(String eMail) {
         HashMap<String, Object> result = new HashMap<>();
         try {

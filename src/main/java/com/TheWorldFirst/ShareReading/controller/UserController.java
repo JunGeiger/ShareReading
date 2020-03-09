@@ -13,6 +13,16 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @PostMapping("/login")
+    public HashMap<String, Object> login(@RequestBody HashMap<String, Object> user) {
+        return userService.login(user);
+    }
+
+    @PostMapping("/sessionLogin")
+    public HashMap<String, Object> sessionLogin(@RequestBody HashMap<String, Object> user) {
+        return userService.sessionLogin(user);
+    }
+
     @PostMapping("/register")
     public HashMap<String, Object> register(@RequestBody HashMap<String, Object> user) {
         return userService.register(user);

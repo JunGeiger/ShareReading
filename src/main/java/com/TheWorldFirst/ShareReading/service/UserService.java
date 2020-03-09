@@ -30,4 +30,18 @@ public interface UserService {
      * @return
      */
     HashMap<String, Object> existUserByEmail(String eMail);
+
+    /**
+     * 用户登录
+     * @param user
+     * @return
+     */
+    HashMap<String, Object> login(HashMap<String, Object> user);
+
+    /**
+     * 用户使用session登录
+     * @param user
+     * @return
+     */
+    HashMap<String, Object> sessionLogin(HashMap<String, Object> user);
 }
