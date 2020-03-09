@@ -271,7 +271,7 @@
             } else {
                 var sessionTime = window.localStorage.getItem("shareReading_user_session_time");
                 var date = new Date();
-                if(((date.getTime() - parseInt(sessionTime))/1000.0/60) > 0) {
+                if(((date.getTime() - parseInt(sessionTime))/1000.0/60) > 120) {
                     sessionLogin(params);
                 } else {
                     var username = window.localStorage.getItem("shareReading_user_name");
