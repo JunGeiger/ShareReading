@@ -192,7 +192,6 @@
                     <div class="content-account-text">
                         <div><a onclick="openLogin();" id="loginName">登录</a></div>
                         <div><a onclick="openRegister();" id="register">注册</a></div>
-                        <div><a onclick="logout();" id="logout" style="display: none;">退出</a></div>
                     </div>
                 </div>
             </div>
@@ -266,22 +265,13 @@
             params.id = window.localStorage.getItem("shareReading_user_id");
             params.session = window.localStorage.getItem("shareReading_user_session");
             // console.log(params)
-            if(params.id == "undefined") {
-
-            } else {
+            if(window.localStorage.getItem("shareReading_user_session").length == 32) {
                 var sessionTime = window.localStorage.getItem("shareReading_user_session_time");
                 var date = new Date();
                 if(((date.getTime() - parseInt(sessionTime))/1000.0/60) > 120) {
                     sessionLogin(params);
                 } else {
-                    var username = window.localStorage.getItem("shareReading_user_name");
-                    if(username.length > 10) {
-                        username = username.substr(0, 10) + "...";
-                    }
-                    $("#loginName").html(username);
-                    $("#loginName").prop("onclick", "return false;");
-                    $("#register").hide();
-                    $("#logout").show();
+                    login();
                 }
             }
         });
@@ -310,9 +300,13 @@
                 content: 'login.html', //iframe的url
                 move: false,
                 end: function () {
-                    setTimeout(function () {
-                        parent.location.reload();
-                    },1500);
+                    if (window.localStorage.getItem("shareReading_user_session").length == 32) {
+                        setTimeout(function () {
+                            parent.location.reload();
+                        },1100);
+                    } else {
+                        return false;
+                    }
                 }
             });
         }
@@ -348,18 +342,8 @@
                         window.localStorage.setItem("shareReading_user_id", data.user.id);
                         window.localStorage.setItem("shareReading_user_session", data.user.session);
                         window.localStorage.setItem("shareReading_user_session_time", data.user.time);
-                        var username = window.localStorage.getItem("shareReading_user_name");
-                        if(username.length > 6) {
-                            username = username.substr(0, 6) + "...";
-                        }
-                        $("#loginName").html(username);
-                        $("#loginName").prop("onclick", "return false;");
-                        $("#register").hide();
-                        $("#logout").show();
+                        login();
                     }else{
-                        // layer.msg(data.message, {shift: -1, time: 1000, icon: 2}, function(){
-                        //
-                        // });
                         logout();
                     }
                 }
@@ -374,9 +358,21 @@
             window.localStorage.setItem("shareReading_user_session", undefined);
             window.localStorage.setItem("shareReading_user_session_time", undefined);
             $("#loginName").html("登录");
-            $("#loginName").onclick = openLogin();
-            $("#register").show();
-            $("#logout").hide();
+            $("#loginName").attr("onclick", "openLogin();");
+            $("#register").html("注册");
+            $("#register").attr("onclick", "openRegister();");
+            location.reload();
+        }
+
+        function login() {
+            var username = window.localStorage.getItem("shareReading_user_name");
+            if(username.length > 10) {
+                username = username.substr(0, 7) + "...";
+            }
+            $("#loginName").html(username);
+            $("#loginName").attr("onclick", "return false;");
+            $("#register").html("退出");
+            $("#register").attr("onclick", "logout();");
         }
     </script>
 </html>

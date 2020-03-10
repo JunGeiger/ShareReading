@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService {
                 user.put("id", existUserByEmail.get("id"));
                 userDao.updatePassword(user);
                 result.put("success", true);
-                result.put("message", "密码修改成功！");
+                result.put("message", "密码已修改！");
                 return result;
             } else {
                 result.put("success", false);
@@ -211,7 +211,7 @@ public class UserServiceImpl implements UserService {
                     userDao.setValidateCodeInvalid(eMail);
                     userDao.saveValidateCode(eMail, validateCode);
                     result.put("success", true);
-                    result.put("message", "验证码发送成功！");
+                    result.put("message", "验证码已发送！");
                 } else {
                     result.put("success", false);
                     result.put("message", "验证码发送失败，请检查邮箱是否正确！");
