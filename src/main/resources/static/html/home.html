@@ -184,8 +184,8 @@
                 <div class="layui-col-md7 content-form">
                     <div class="content-form-input">
                         <input autocomplete="off" placeholder="请输入ISBN/书名" class="layui-input" />
-                        <button type="button" class="layui-btn"><i  class="layui-icon">&#xe615;</i>搜索</button>
-                        <button type="button" class="layui-btn"><i  class="layui-icon">&#xe654;</i>添加书籍</button>
+                        <button type="button" class="layui-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                        <button type="button" class="layui-btn" id="addBook"><i class="layui-icon">&#xe654;</i>添加书籍</button>
                     </div>
                 </div>
                 <div class="layui-col-md2 content-account">
@@ -196,7 +196,7 @@
                 </div>
             </div>
         </div>
-        <div class="home-top management">
+        <div class="home-top management" id="management">
             <div class="layui-row top-content ">
                 <div class="layui-col-md2 management-button">
                     <a>用户管理</a>
@@ -258,6 +258,7 @@
     <script src="../js/jquery-3.4.1.min.js"></script>
     <script src="../layui/layui.js"></script>
     <script type="text/javascript">
+        checkPermissions();
         var layer;
         layui.use('layer', function(){
             layer = layui.layer;
@@ -323,6 +324,7 @@
                 move: false
             });
         }
+        //session登录
         function sessionLogin(params) {
             $.ajax({
                 type : 'post',
@@ -349,7 +351,7 @@
                 }
             });
         }
-
+        //登出数据处理
         function logout() {
             window.localStorage.setItem("shareReading_user_email", undefined);
             window.localStorage.setItem("shareReading_user_level", undefined);
@@ -363,7 +365,7 @@
             $("#register").attr("onclick", "openRegister();");
             location.reload();
         }
-
+        //登录数据处理
         function login() {
             var username = window.localStorage.getItem("shareReading_user_name");
             if(username.length > 10) {
@@ -373,6 +375,15 @@
             $("#loginName").attr("onclick", "return false;");
             $("#register").html("退出");
             $("#register").attr("onclick", "logout();");
+        }
+        function checkPermissions() {
+            if(window.localStorage.getItem("shareReading_user_session").length != 32) {
+                $("#addBook").attr("style", "display: none;");
+                $("#management").attr("style", "display: none;");
+            } else if (window.localStorage.getItem("shareReading_user_level") > 1) {
+                $("#addBook").attr("style", "display: none;");
+                $("#management").attr("style", "display: none;");
+            }
         }
     </script>
 </html>
