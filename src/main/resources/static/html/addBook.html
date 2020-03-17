@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link type="text/css" rel="stylesheet" href="../../layui/css/layui.css" />
+    <style type="text/css">
+        body {
+            background-color: #D8E6E7;
+            padding-top: 40px;
+        }
+        .layui-form {
+            width: 700px;
+            padding: 0;
+            margin-left: 20px;
+        }
+        .layui-input {
+            width: 300px;
+        }
+        .bookInfoByISBN {
+            line-height: 38px;
+            cursor: pointer;
+        }
+        .bookInfoByISBN:hover {
+            color: #7b8c8d;
+        }
+        .bookInfoByISBN:active {
+            color: #373f40;
+        }
+        .getBookInfo {
+            text-align: right;
+            width: 100px !important;
+            margin-left: 290px !important;
+            margin-right: 0px !important;
+        }
+        #bookIsbn {
+            width: 500px;
+        }
+        .book-input {
+            width: 450px;
+        }
+        .book-img {
+            float: right;
+            margin-top: -436px;
+            width: 120px;
+            height: 150px;
+            overflow: hidden;
+            justify-content: center;
+        }
+        .book-img img {
+            max-width: 120px;
+            max-height: 150px;
+            vertical-align: middle;
+        }
+        #bookDescription {
+            resize:none;
+            width: 600px;
+        }
+        #saveBook {
+            float: right;
+            position: fixed;
+            right: 5px;
+            top: 40px;
+            border-radius: 9px;
+            width: 40px;
+            height: 34px;
+            text-align: center;
+            line-height: 36px;
+            font-size: 14px;
+            background-color: #3c6382;
+            margin-right: 5px;
+            cursor: pointer;
+            color: #ffffff;
+        }
+        #saveBook:hover {
+            background-color: #468cad;
+        }
+        #saveBook:active {
+            background-color: #4aa4c6;
+        }
+    </style>
+</head>
+<body>
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">ISBN</label>
+            <div class="layui-input-inline">
+                <input type="text" name="bookIsbn" id="bookIsbn" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-input-inline getBookInfo">
+                <a class="bookInfoByISBN" onclick="countDownTimer();">获取书籍信息</a>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">名称</label>
+            <div class="layui-input-inline">
+                <input type="text" name="bookName" id="bookName" autocomplete="off" class="layui-input book-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">作者</label>
+            <div class="layui-input-inline">
+                <input type="text" name="bookAuthor" id="bookAuthor" autocomplete="off" class="layui-input book-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">出版社</label>
+            <div class="layui-input-inline">
+                <input type="text" name="bookPublisher" id="bookPublisher" autocomplete="off" class="layui-input book-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">出版时间</label>
+            <div class="layui-input-inline">
+                <input type="text" name="bookPublished" id="bookPublished" autocomplete="off" class="layui-input book-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">简介</label>
+            <div class="layui-input-inline">
+                <textarea rows="10" name="bookDescription" id="bookDescription" autocomplete="off" class="layui-textarea book-input"></textarea>
+            </div>
+        </div>
+        <div class="book-img">
+            <img src="../book/image/s33525533.jpg" />
+        </div>
+        <div id="saveBook" lay-submit lay-filter="saveBook">
+            保存
+        </div>
+    </form>
+</body>
+</html>
+<script src="../../js/jquery-3.4.1.min.js"></script>
+<script src="../../layui/layui.js"></script>
+<script type="text/javascript">
+
+</script>

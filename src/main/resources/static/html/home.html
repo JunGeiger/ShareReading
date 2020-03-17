@@ -88,9 +88,15 @@
             }
             .book-img {
                 display: inline-block;
+                width: 130px;
+                height: 150px;
+                overflow: hidden;
+                justify-content: center;
             }
             .book-img img {
-                height: 140px;
+                max-width: 115px;
+                max-height: 140px;
+                vertical-align: middle;
                 padding: 0px 0px;
                 margin: 10px 0px 0px 15px;
             }
@@ -99,7 +105,6 @@
                 display: inline-block;
                 vertical-align: top;
                 padding-top: 10px;
-                padding-left: 10px;
                 padding-bottom: 10px;
                 font-size: 13px;
             }
@@ -185,7 +190,7 @@
                     <div class="content-form-input">
                         <input autocomplete="off" placeholder="请输入ISBN/书名" class="layui-input" />
                         <button type="button" class="layui-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
-                        <button type="button" class="layui-btn" id="addBook"><i class="layui-icon">&#xe654;</i>添加书籍</button>
+                        <button type="button" class="layui-btn" id="addBook" onclick="openAddBook();"><i class="layui-icon">&#xe654;</i>添加书籍</button>
                     </div>
                 </div>
                 <div class="layui-col-md2 content-account">
@@ -250,6 +255,38 @@
                 </div>
             </div>
         </div>
+        <div class="home-middle">
+            <div class="layui-row middle-content">
+                <div class="layui-col-md8 book-info">
+                    <div class="book-img">
+                        <img src="../book/image/s33549420.jpg" />
+                    </div>
+                    <div class="book-text">
+                        <p>书名: 43种濒危动物插画集</p>
+                        <p>作者: [英] 米莉·玛洛塔 / Millie Marotta</p>
+                        <p>出版社: 后浪丨四川美术出版社</p>
+                        <p>译者: 孙依静</p>
+                        <p>出版年: 2020-2</p>
+                        <p>ISBN: 9787541088841</p>
+                        <p maxlength=88>
+                            书籍简介：芳踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳踪难觅的觅的觅的觅的觅的...
+                        </p>
+                    </div>
+                </div>
+                <div class="layui-col-md4 other-info">
+                    <div class="other-info-text">
+                        <span class="other-info-comment">精选品论:</span>
+                        <span maxlength=142>
+                        芳踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳栗的栗腹鹭芳栗的栗腹鹭芳栗的栗腹鹭芳栗的栗腹鹭芳栗的栗腹鹭芳栗的栗腹鹭芳栗的栗踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳踪难觅...
+                    </span>
+                    </div>
+
+                    <div class="other-info-more">
+                        <a onclick="getMoreInfo();">查看更多<i class="layui-icon"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="layui-fixbar">
             <li class="layui-icon layui-fixbar-top" lay-type="top" style="display: list-item;" onclick="document.body.scrollTop = document.documentElement.scrollTop = 0;">&#xe604;</li>
         </div>
@@ -266,12 +303,15 @@
             params.id = window.localStorage.getItem("shareReading_user_id");
             params.session = window.localStorage.getItem("shareReading_user_session");
             // console.log(params)
+            //检查登录信息是否存在
             if(window.localStorage.getItem("shareReading_user_session").length == 32) {
                 var sessionTime = window.localStorage.getItem("shareReading_user_session_time");
                 var date = new Date();
                 if(((date.getTime() - parseInt(sessionTime))/1000.0/60) > 120) {
+                    //本地信息过期，重新使用密钥登录
                     sessionLogin(params);
                 } else {
+                    //本地信息还有效，不操作，保持登录
                     login();
                 }
             }
@@ -324,7 +364,7 @@
                 move: false
             });
         }
-        //session登录
+        //密钥登录
         function sessionLogin(params) {
             $.ajax({
                 type : 'post',
@@ -376,6 +416,7 @@
             $("#register").html("退出");
             $("#register").attr("onclick", "logout();");
         }
+        //检查页面权限
         function checkPermissions() {
             if(window.localStorage.getItem("shareReading_user_session").length != 32) {
                 $("#addBook").attr("style", "display: none;");
@@ -384,6 +425,19 @@
                 $("#addBook").attr("style", "display: none;");
                 $("#management").attr("style", "display: none;");
             }
+        }
+        //打开书籍添加弹窗
+        function openAddBook() {
+            layer.open({
+                type: 2,
+                title: ['添加书籍', 'background-color: #3c6382;color:#e9e9e9;'],
+                shadeClose: false,
+                shade: 0.8,
+                area: ['800px', '600px'],
+                // offset: ['50%', '50%'],
+                content: 'addBook.html', //iframe的url
+                move: false
+            });
         }
     </script>
 </html>
