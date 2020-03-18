@@ -167,7 +167,6 @@ public class UserServiceImpl implements UserService {
     public HashMap<String, Object> sessionLogin(HashMap<String, Object> user) {
         HashMap<String, Object> result = new HashMap<>();
         try {
-//
             HashMap<String, Object> sessionInfo = userDao.getLoginSession((String) user.get("id"), (String) user.get("session"));
             userDao.deleteLoginSession((String)user.get("id"));
             if (sessionInfo != null) {

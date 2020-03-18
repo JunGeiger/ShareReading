@@ -88,7 +88,7 @@
                 <input type="text" name="bookIsbn" id="bookIsbn" autocomplete="off" class="layui-input">
             </div>
             <div class="layui-input-inline getBookInfo">
-                <a class="bookInfoByISBN" onclick="countDownTimer();">获取书籍信息</a>
+                <a class="bookInfoByISBN" onclick="getBookInfo();">获取书籍信息</a>
             </div>
         </div>
         <div class="layui-form-item">
@@ -122,9 +122,9 @@
             </div>
         </div>
         <div class="book-img">
-            <img src="../book/image/s33525533.jpg" />
+            <img src="" />
         </div>
-        <div id="saveBook" lay-submit lay-filter="saveBook">
+        <div id="saveBook" lay-submit lay-filter="saveBook" style="display: none" onclick="saveBook();">
             保存
         </div>
     </form>
@@ -133,5 +133,44 @@
 <script src="../../js/jquery-3.4.1.min.js"></script>
 <script src="../../layui/layui.js"></script>
 <script type="text/javascript">
+    var layer;
+    layui.use('layer', function() {
+        layer = layui.layer;
+    });
+    function getBookInfo() {
+        var isbn = $("#bookIsbn").val();
+        if(isbn == "") {
+            layer.msg("请填写ISBN码", {shift: -1, time: 1000, icon: 2}, function(){
 
+            });
+            return false;
+        }
+        $.ajax({
+            type : 'get',
+            url : 'https://api.binstd.com/isbn/query?appkey=8097584417535525&isbn='+isbn,
+            success : function(data) {
+                layer.msg("获取成功", {shift: -1, time: 1000, icon: 1}, function(){
+
+                });
+                $("#bookName").val();
+                $("#bookAuthor").val();
+                $("#bookPublisher").val();
+                $("#bookPublished").val();
+                $("#bookDescription").val();
+                $("#book-img").find("img").attr("src", );
+
+                $("#bookIsbn").attr("readonly", true);
+                $("#bookName").attr("readonly", true);
+                $("#bookAuthor").attr("readonly", true);
+                $("#bookPublisher").attr("readonly", true);
+                $("#bookPublished").attr("readonly", true);
+                $("#bookDescription").attr("readonly", true);
+            },
+            error : function (data) {
+                layer.msg("获取失败", {shift: -1, time: 1000, icon: 1}, function(){
+
+                });
+            }
+        });
+    }
 </script>
