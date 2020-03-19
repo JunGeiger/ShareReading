@@ -304,7 +304,8 @@
             params.session = window.localStorage.getItem("shareReading_user_session");
             // console.log(params)
             //检查登录信息是否存在
-            if(window.localStorage.getItem("shareReading_user_session").length == 32) {
+            var shareReading_user_session = window.localStorage.getItem("shareReading_user_session");
+            if(shareReading_user_session != null && shareReading_user_session.length == 32) {
                 var sessionTime = window.localStorage.getItem("shareReading_user_session_time");
                 var date = new Date();
                 if(((date.getTime() - parseInt(sessionTime))/1000.0/60) > 120) {
@@ -408,17 +409,22 @@
         //登录数据处理
         function login() {
             var username = window.localStorage.getItem("shareReading_user_name");
-            if(username.length > 10) {
-                username = username.substr(0, 7) + "...";
+            if(username != null && username != "") {
+                if(username.length > 10) {
+                    username = username.substr(0, 7) + "...";
+                }
+                $("#loginName").html(username);
+                $("#loginName").attr("onclick", "return false;");
+                $("#register").html("退出");
+                $("#register").attr("onclick", "logout();");
+            } else {
+                return false;
             }
-            $("#loginName").html(username);
-            $("#loginName").attr("onclick", "return false;");
-            $("#register").html("退出");
-            $("#register").attr("onclick", "logout();");
         }
         //检查页面权限
         function checkPermissions() {
-            if(window.localStorage.getItem("shareReading_user_session").length != 32) {
+            var shareReading_user_session = window.localStorage.getItem("shareReading_user_session");
+            if(shareReading_user_session == null || shareReading_user_session.length != 32) {
                 $("#addBook").attr("style", "display: none;");
                 $("#management").attr("style", "display: none;");
             } else if (window.localStorage.getItem("shareReading_user_level") > 1) {
