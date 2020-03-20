@@ -1,16 +1,18 @@
 package com.TheWorldFirst.ShareReading.util;
 
-import org.jsoup.Connection;
-import org.jsoup.Jsoup;
 import org.openqa.selenium.By;
 import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.logging.*;
+import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.*;
+import java.util.logging.Level;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated;
 
@@ -94,14 +96,14 @@ public class CrawlerUtil {
         driver.get(url);
         WebDriverWait wait = new WebDriverWait(driver, waitTime);
         wait.until(presenceOfElementLocated(By.tagName("img")));
+        String imgBase64 = "";
         try {
-            driver.executeScript("function getBase64(imgUrl) { window.URL = window.URL; let xhr = new XMLHttpRequest(); xhr.open('get', imgUrl, true); xhr.responseType = 'blob'; xhr.onload = function () { if (this.status == 200) { let blob = this.response; let oFileReader = new FileReader(); oFileReader.onloadend = function (e) { let base64 = e.target.result; alert(base64); }; oFileReader.readAsDataURL(blob); }; }; xhr.send(); }; getBase64(arguments[0]);", url);
+            driver.executeScript("function getBase64(imgUrl) { window.URL = window.URL; let xhr = new XMLHttpRequest(); xhr.open('get', imgUrl, true); xhr.responseType = 'blob'; xhr.onload = function () { if (this.status == 200) { let blob = this.response; let oFileReader = new FileReader(); oFileReader.onloadend = function (e) { let base64 = e.target.result; document.body.innerHTML = base64; }; oFileReader.readAsDataURL(blob); }; }; xhr.send(); }; getBase64(arguments[0]);", url);
             Thread.sleep(1000);
+            imgBase64 = driver.findElement(By.tagName("body")).getText();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        String  imgBase64 = driver.switchTo().alert().getText();
-        driver.switchTo().alert().accept();
         driver.quit();
         return imgBase64;
     }

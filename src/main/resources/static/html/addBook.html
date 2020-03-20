@@ -130,7 +130,7 @@
         </div>
         <div class="book-img">
             <!--src="../book/image/bookImageDefault.png"-->
-            <img src="" />
+            <img src="../book/image/bookImageDefault.png" />
         </div>
         <div id="saveBook" lay-submit lay-filter="saveBook" style="display: none" onclick="saveBook();">
             保存
@@ -148,6 +148,7 @@
     });
     function getBookInfo() {
         $(".load-icon").show();
+        $(".getBookInfo").hide();
         var isbn = $("#bookIsbn").val();
         if(isbn == "") {
             layer.msg("请填写ISBN码", {shift: -1, time: 1000, icon: 2}, function(){
@@ -161,6 +162,21 @@
             success : function(data) {
                 $(".load-icon").hide();
                 if(data.success){
+                    var book = data.book;
+                    console.log(book);
+                    $("#bookName").val(book.bookName);
+                    $("#bookAuthor").val(book.bookAuthor);
+                    $("#bookPublisher").val(book.bookPublisher);
+                    $("#bookPublished").val(book.bookPublished);
+                    $("#bookDescription").val(book.bookDescription);
+                    $(".book-img").find("img").prop("src", book.bookImage);
+
+                    $("#bookIsbn").attr("readonly", true);
+                    $("#bookName").attr("readonly", true);
+                    $("#bookAuthor").attr("readonly", true);
+                    $("#bookPublisher").attr("readonly", true);
+                    $("#bookPublished").attr("readonly", true);
+                    $("#bookDescription").attr("readonly", true);
                     layer.msg(data.message, {shift: -1, time: 1000, icon: 1}, function(){
 
                     });
@@ -170,24 +186,7 @@
                     });
                 }
 
-                /*$("#bookName").val();
-                $("#bookAuthor").val();
-                $("#bookPublisher").val();
-                $("#bookPublished").val();
-                $("#bookDescription").val();
-                $("#book-img").find("img").attr("src", );
-
-                $("#bookIsbn").attr("readonly", true);
-                $("#bookName").attr("readonly", true);
-                $("#bookAuthor").attr("readonly", true);
-                $("#bookPublisher").attr("readonly", true);
-                $("#bookPublished").attr("readonly", true);
-                $("#bookDescription").attr("readonly", true);*/
-
             }
         });
     }
-
-function getBase64(imgUrl) { window.URL = window.URL; let xhr = new XMLHttpRequest(); xhr.open("get", imgUrl, true); xhr.responseType = "blob"; xhr.onload = function () { if (this.status == 200) { let blob = this.response; let oFileReader = new FileReader(); oFileReader.onloadend = function (e) { let base64 = e.target.result; console.log(base64); }; oFileReader.readAsDataURL(blob); }; }; xhr.send(); }; getBase64(arguments[0]);
-
 </script>

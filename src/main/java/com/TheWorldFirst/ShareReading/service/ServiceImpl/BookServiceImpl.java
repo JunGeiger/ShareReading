@@ -47,10 +47,24 @@ public class BookServiceImpl implements BookService {
                     String bookIsbn = "";
                     for (int i = 0; i < bookInfoSplit.length; i++) {
                         if(bookInfoSplit[i].equals("作者:")) {
-                            bookAuthor = bookInfoSplit[i+1];
+                            for (int j = i+1; j < bookInfoSplit.length; j++) {
+                                if(bookInfoSplit[j].equals("出版社:")) {
+                                    break;
+                                }
+                                bookAuthor += bookInfoSplit[j];
+                            }
                         }
                         if(bookInfoSplit[i].equals("出版社:")) {
-                            bookPublisher = bookInfoSplit[i+1];
+                            for (int j = i+1; j < bookInfoSplit.length; j++) {
+                                if(bookInfoSplit[j].equals("出品方:") ||
+                                        bookInfoSplit[j].equals("副标题:") ||
+                                        bookInfoSplit[j].equals("原作名:") ||
+                                        bookInfoSplit[j].equals("译者:") ||
+                                        bookInfoSplit[j].equals("出版年:")) {
+                                    break;
+                                }
+                                bookPublisher += bookInfoSplit[j];
+                            }
                         }
                         if(bookInfoSplit[i].equals("出版年:")) {
                             bookPublished = bookInfoSplit[i+1];
@@ -64,6 +78,7 @@ public class BookServiceImpl implements BookService {
                     if(bookDescription.equals("")) {
                         bookDescription = document.select("#link-report").select("div").select(".intro").text();
                     }
+                    bookDescription.replace(" ", "\n");
                     book.put("bookIsbn", bookIsbn);
                     book.put("bookName", bookName);
                     book.put("bookAuthor", bookAuthor);
