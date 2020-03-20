@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.TheWorldFirst.ShareReading.dao.UserDao">
+    <insert id="register" parameterType="java.util.HashMap">
+        INSERT INTO `user` ( user_name, user_email, user_password, createTime )
+        VALUES
+        (#{params.username}, #{params.email}, #{params.password}, NOW())
+    </insert>
+    <update id="updatePassword" parameterType="java.util.HashMap">
+        UPDATE `user`
+        SET
+            user_password = #{params.password},
+            updateTime = NOW()
+        WHERE
+            id = #{params.id}
+    </update>
+</mapper>

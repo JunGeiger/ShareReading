@@ -188,6 +188,28 @@
         });
     }
 
-function getBase64(imgUrl) { window.URL = window.URL; let xhr = new XMLHttpRequest(); xhr.open("get", imgUrl, true); xhr.responseType = "blob"; xhr.onload = function () { if (this.status == 200) { let blob = this.response; let oFileReader = new FileReader(); oFileReader.onloadend = function (e) { let base64 = e.target.result; console.log(base64); }; oFileReader.readAsDataURL(blob); }; }; xhr.send(); }; getBase64(arguments[0]);
+    function getBase64(imgUrl) {
+        window.URL = window.URL;
+        var xhr = new XMLHttpRequest();
+        xhr.open("get", imgUrl, true);
+        // 至关重要
+        xhr.responseType = "blob";
+        xhr.onload = function () {
+            if (this.status == 200) {
+                //得到一个blob对象
+                var blob = this.response;
+                // 至关重要
+                var oFileReader = new FileReader();
+                oFileReader.onloadend = function (e) {
+                    var base64 = e.target.result;
+                    console.imgBase64 = base64;
+                };
+                oFileReader.readAsDataURL(blob);
+            }
+        }
+        xhr.send();
+    }
+    getBase64("../book/image/bookImageDefault.png");
+    console.log(console.imgBase64);
 
 </script>

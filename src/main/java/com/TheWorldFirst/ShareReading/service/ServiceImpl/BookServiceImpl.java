@@ -4,7 +4,6 @@ import com.TheWorldFirst.ShareReading.service.BookService;
 import com.TheWorldFirst.ShareReading.util.CrawlerUtil;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -27,10 +26,14 @@ public class BookServiceImpl implements BookService {
                 String htmlPage = CrawlerUtil.getBookInfoByFirefox(htmlUrl);
                 if (htmlPage != null) {
                     Document document = Jsoup.parse(htmlPage);
-                    String imgUrl = document.select("#mainpic").select(".nbg").attr("href");
+                    //爬取到的书籍信息
+                    String imgUrl = document.select("#mainpic").select(".nbg").select("img").attr("src");
+                    String bookName = document.select("#mainpic").select(".nbg").select("img").attr("alt");
                     String bookInfo = document.select("#info").text();
                     String bookBriefShort = document.select("#link-report").select(".short ").select(".intro").text();
                     String bookBriefAll = document.select("#link-report").select(".all ").select(".intro").text();
+
+                    String img = CrawlerUtil.getBookImageFirefox(imgUrl);
                     result.put("htmlPage", "");
                     result.put("success", true);
                     result.put("message", "获取成功！");

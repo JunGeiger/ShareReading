@@ -1,5 +1,7 @@
 package com.TheWorldFirst.ShareReading.util;
 
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxBinary;
@@ -7,7 +9,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.io.File;
+import java.io.*;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated;
 
@@ -62,5 +64,19 @@ public class CrawlerUtil {
         WebDriverWait wait = new WebDriverWait(driver, waitTime);
         wait.until(presenceOfElementLocated(By.className("article")));
         return driver.getPageSource();
+    }
+
+    /**
+     *根据豆瓣url获取书籍图片Base64(根据火狐)
+     * @param url
+     * @return
+     */
+    public static String getBookImageFirefox(String url) {
+        FirefoxDriver driver = getFirefoxBinary();
+        driver.get(url);
+        WebDriverWait wait = new WebDriverWait(driver, waitTime);
+        WebElement firstResult = wait.until(presenceOfElementLocated(By.tagName("img")));
+        String imgBase64 = (String) driver.executeScript("function getBase64(imgUrl) { window.URL = window.URL; let xhr = new XMLHttpRequest(); xhr.open(\"get\", imgUrl, true); xhr.responseType = \"blob\"; xhr.onload = function () { if (this.status == 200) { let blob = this.response; let oFileReader = new FileReader(); oFileReader.onloadend = function (e) { let base64 = e.target.result; console.log(base64); }; oFileReader.readAsDataURL(blob); }; }; xhr.send(); }; getBase64(arguments[0]);", url);
+        return imgBase64;
     }
 }
