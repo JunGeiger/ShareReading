@@ -3,6 +3,7 @@ package com.TheWorldFirst.ShareReading.util;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.openqa.selenium.By;
+import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -25,17 +26,27 @@ public class CrawlerUtil {
     private static int waitTime = 3;
 
     /**
-     *获取火狐浏览器
+     *获取火狐浏览器配置信息
      * @return
      */
-    private static FirefoxDriver getFirefoxBinary() {
+    private static FirefoxOptions getFirefoxOptions() {
         File pathToBinary = new File(browserFireFox);
         FirefoxBinary firefoxBinary = new FirefoxBinary(pathToBinary);
         firefoxBinary.addCommandLineOptions("--headless");
         System.setProperty("webdriver.gecko.driver", geckodriver);
         FirefoxOptions firefoxOptions = new FirefoxOptions();
+        //设置不加载css和图片
+        firefoxOptions.setPageLoadStrategy(PageLoadStrategy.EAGER);
         firefoxOptions.setBinary(firefoxBinary);
-        FirefoxDriver firefoxDriver = new FirefoxDriver(firefoxOptions);
+        return firefoxOptions;
+    }
+
+    /**
+     *获取火狐浏览器
+     * @return
+     */
+    private static FirefoxDriver getFirefoxDriver() {
+        FirefoxDriver firefoxDriver = new FirefoxDriver(getFirefoxOptions());
         return firefoxDriver;
     }
 
@@ -45,11 +56,14 @@ public class CrawlerUtil {
      * @return
      */
     public static String getBookUrlByFirefox(String isbn) {
-        FirefoxDriver driver = getFirefoxBinary();
+        FirefoxDriver driver = getFirefoxDriver();
         driver.get("https://search.douban.com/book/subject_search?search_text=" + isbn + "&cat=1001");
         WebDriverWait wait = new WebDriverWait(driver, 3);
         WebElement firstResult = wait.until(presenceOfElementLocated(By.className("cover-link")));
+        //得到内容之后立即停止继续加载
+        driver.executeScript("var xmlhttp = new XMLHttpRequest(); xmlhttp.abort(); window.stop();");
         String bookUrl = firstResult.getAttribute("href");
+        driver.close();
         return bookUrl;
     }
 
@@ -59,11 +73,15 @@ public class CrawlerUtil {
      * @return
      */
     public static String getBookInfoByFirefox(String url) {
-        FirefoxDriver driver = getFirefoxBinary();
+        FirefoxDriver driver = getFirefoxDriver();
         driver.get(url);
         WebDriverWait wait = new WebDriverWait(driver, waitTime);
-        wait.until(presenceOfElementLocated(By.className("article")));
-        return driver.getPageSource();
+        wait.until(presenceOfElementLocated(By.id("link-report")));
+        //得到内容之后立即停止继续加载
+        driver.executeScript("var xmlhttp = new XMLHttpRequest(); xmlhttp.abort(); window.stop();");
+        String pageSource = driver.getPageSource();
+        driver.close();
+        return pageSource;
     }
 
     /**
@@ -72,11 +90,19 @@ public class CrawlerUtil {
      * @return
      */
     public static String getBookImageFirefox(String url) {
-        FirefoxDriver driver = getFirefoxBinary();
+        FirefoxDriver driver = getFirefoxDriver();
         driver.get(url);
         WebDriverWait wait = new WebDriverWait(driver, waitTime);
-        WebElement firstResult = wait.until(presenceOfElementLocated(By.tagName("img")));
-        String imgBase64 = (String) driver.executeScript("function getBase64(imgUrl) { window.URL = window.URL; let xhr = new XMLHttpRequest(); xhr.open(\"get\", imgUrl, true); xhr.responseType = \"blob\"; xhr.onload = function () { if (this.status == 200) { let blob = this.response; let oFileReader = new FileReader(); oFileReader.onloadend = function (e) { let base64 = e.target.result; console.log(base64); }; oFileReader.readAsDataURL(blob); }; }; xhr.send(); }; getBase64(arguments[0]);", url);
+        wait.until(presenceOfElementLocated(By.tagName("img")));
+        try {
+            driver.executeScript("function getBase64(imgUrl) { window.URL = window.URL; let xhr = new XMLHttpRequest(); xhr.open('get', imgUrl, true); xhr.responseType = 'blob'; xhr.onload = function () { if (this.status == 200) { let blob = this.response; let oFileReader = new FileReader(); oFileReader.onloadend = function (e) { let base64 = e.target.result; alert(base64); }; oFileReader.readAsDataURL(blob); }; }; xhr.send(); }; getBase64(arguments[0]);", url);
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        String  imgBase64 = driver.switchTo().alert().getText();
+        driver.switchTo().alert().accept();
+        driver.quit();
         return imgBase64;
     }
 }
