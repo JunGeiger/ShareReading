@@ -48,7 +48,7 @@ public class BookServiceImpl implements BookService {
                     for (int i = 0; i < bookInfoSplit.length; i++) {
                         if(bookInfoSplit[i].equals("作者:")) {
                             for (int j = i+1; j < bookInfoSplit.length; j++) {
-                                if(bookInfoSplit[j].equals("出版社:")) {
+                                if((bookInfoSplit[j].substring(bookInfoSplit[j].length()-1)).equals(":")) {
                                     break;
                                 }
                                 bookAuthor += bookInfoSplit[j];
@@ -56,11 +56,7 @@ public class BookServiceImpl implements BookService {
                         }
                         if(bookInfoSplit[i].equals("出版社:")) {
                             for (int j = i+1; j < bookInfoSplit.length; j++) {
-                                if(bookInfoSplit[j].equals("出品方:") ||
-                                        bookInfoSplit[j].equals("副标题:") ||
-                                        bookInfoSplit[j].equals("原作名:") ||
-                                        bookInfoSplit[j].equals("译者:") ||
-                                        bookInfoSplit[j].equals("出版年:")) {
+                                if((bookInfoSplit[j].substring(bookInfoSplit[j].length()-1)).equals(":")) {
                                     break;
                                 }
                                 bookPublisher += bookInfoSplit[j];
@@ -78,7 +74,6 @@ public class BookServiceImpl implements BookService {
                     if(bookDescription.equals("")) {
                         bookDescription = document.select("#link-report").select("div").select(".intro").text();
                     }
-                    bookDescription.replace(" ", "\n");
                     book.put("bookIsbn", bookIsbn);
                     book.put("bookName", bookName);
                     book.put("bookAuthor", bookAuthor);
@@ -101,4 +96,6 @@ public class BookServiceImpl implements BookService {
         }
         return result;
     }
+
+
 }

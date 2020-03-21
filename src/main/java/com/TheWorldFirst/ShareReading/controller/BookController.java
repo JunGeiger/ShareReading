@@ -13,6 +13,11 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
+    /**
+     * 获取书籍信息，根据isbn
+     * @param isbn
+     * @return
+     */
     @GetMapping("/getBookInfoByIsbn")
     public HashMap<String, Object> getBookInfoByIsbn(@RequestParam("isbn") String isbn) {
         return bookService.getBookInfoByIsbn(isbn);
