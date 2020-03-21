@@ -2,12 +2,15 @@ package com.TheWorldFirst.ShareReading.service.ServiceImpl;
 
 import com.TheWorldFirst.ShareReading.dao.BookDao;
 import com.TheWorldFirst.ShareReading.service.BookService;
+import com.TheWorldFirst.ShareReading.service.UserService;
 import com.TheWorldFirst.ShareReading.util.CrawlerUtil;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 @Service
@@ -16,15 +19,36 @@ public class BookServiceImpl implements BookService {
     @Autowired
     private BookDao bookDao;
 
+    @Autowired
+    private UserService userService;
+
     @Override
-    public HashMap<String, Object> getBookInfoByIsbn(String isbn) {
+    public HashMap<String, Object> getBookInfoByIsbn(String isbn, String session, String userId) {
         HashMap<String, Object> result = new HashMap<>();
+        String permission = userService.verifyUserPermission(session, userId);
+        if(!permission.equals("true")) {
+            if (permission.equals("false")) {
+                result.put("success", false);
+                result.put("message", "用户信息验证错误，请退出重新登录！");
+                return result;
+            }
+            result.put("success", false);
+            result.put("message", permission);
+            return result;
+        }
+        HashMap<String, Object> daoBookInfo = bookDao.getBookInfoByExist(isbn);
+        if(daoBookInfo != null) {
+            result.put("success", false);
+            result.put("message", "书籍已存在无需重复添加！");
+            return result;
+        }
         HashMap<String, Object> book = new HashMap<>();
         String htmlUrl = "";
         try {
             try {
                 htmlUrl = CrawlerUtil.getBookUrlByFirefox(isbn);
             } catch (Exception e) {
+                e.printStackTrace();
                 result.put("success", false);
                 result.put("message", "书籍未找到！");
             }
@@ -97,5 +121,78 @@ public class BookServiceImpl implements BookService {
         return result;
     }
 
+    @Override
+    public HashMap<String, Object> getBookInfoByIsbnDatabase(String isbn, String session, String userId) {
+        HashMap<String, Object> result = new HashMap<>();
+        String permission = userService.verifyUserPermission(session, userId);
+        if(!permission.equals("true")) {
+            if (permission.equals("false")) {
+                result.put("success", false);
+                result.put("message", "用户信息验证错误，请退出重新登录！");
+                return result;
+            }
+            result.put("success", false);
+            result.put("message", permission);
+            return result;
+        }
+        try {
+            HashMap<String, Object> book = bookDao.getBookInfoByExist(isbn);
+            result.put("success", true);
+            result.put("message", "获取成功！");
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("success", false);
+            result.put("message", "获取失败！");
+        }
+        return result;
+    }
 
+    @Override
+    @Transactional
+    public HashMap<String, Object> saveBook(HashMap<String, Object> params) {
+        HashMap<String, Object> result = new HashMap<>();
+        String permission = userService.verifyUserPermission((String) params.get("session"), (String) params.get("userId"));
+        if(!permission.equals("true")) {
+            if (permission.equals("false")) {
+                result.put("success", false);
+                result.put("message", "用户信息验证错误，请退出重新登录！");
+                return result;
+            }
+            result.put("success", false);
+            result.put("message", permission);
+            return result;
+        }
+        HashMap<String, Object> daoBookInfo = bookDao.getBookInfoByExist((String) params.get("isbn"));
+        if(daoBookInfo != null) {
+            result.put("success", false);
+            result.put("message", "书籍已存在无需重复添加！");
+            return result;
+        }
+        try {
+            bookDao.saveBook((HashMap<String, Object>) params.get("book"));
+            result.put("success", true);
+            result.put("message", "保存成功！");
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("success", false);
+            result.put("message", "保存失败！");
+        }
+        return result;
+    }
+
+    @Override
+    public HashMap<String, Object> getBookList(Integer page, Integer limit, String keyword) {
+        HashMap<String, Object> result = new HashMap<>();
+        try {
+            ArrayList<HashMap<String, Object>> bookList = bookDao.getBookList(page, limit, keyword);
+            result.put("bookList", bookList);
+            result.put("success", true);
+            result.put("message", "获取书籍列表成功！");
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("success", false);
+            result.put("message", "获取书籍列表失败！");
+        }
+        return result;
+    }
 }

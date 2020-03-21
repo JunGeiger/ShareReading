@@ -44,4 +44,12 @@ public interface UserService {
      * @return
      */
     HashMap<String, Object> sessionLogin(HashMap<String, Object> user);
+
+    /**
+     * 验证用户登录和权限
+     * @param session
+     * @param userId
+     * @return
+     */
+    String verifyUserPermission(String session, String userId);
 }

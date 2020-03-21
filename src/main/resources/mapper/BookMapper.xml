@@ -2,5 +2,29 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.TheWorldFirst.ShareReading.dao.BookDao">
-
+    <insert id="saveBook" parameterType="java.util.HashMap">
+        INSERT INTO book ( book_isbn, book_name, book_author, book_publisher, book_published, book_description, book_image, createTime )
+        VALUES
+        (#{book.bookIsbn}, #{book.bookName}, #{book.bookAuthor}, #{book.bookPublisher}, #{book.bookPublished}, #{book.bookDescription}, #{book.bookImg}, NOW())
+    </insert>
+    <select id="getBookList" resultType="java.util.HashMap">
+        SELECT
+            id,
+            book_isbn AS isbn,
+            book_name AS 'name',
+            book_author AS author,
+            book_publisher AS publisher,
+            book_published AS published,
+            book_description AS description,
+            book_image AS image
+        FROM
+            book
+            WHERE 1=1
+        <if test="keyword != null and keyword != ''">
+            AND ((book_isbn LIKE CONCAT('%',#{keyword},'%')) OR (book_name LIKE CONCAT('%',#{keyword},'%')))
+        </if>
+        ORDER BY
+            createTime DESC
+            LIMIT ${(page-1)*limit},${limit}
+    </select>
 </mapper>

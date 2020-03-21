@@ -128,12 +128,7 @@
         });
         form.on('submit(register)', function(data){
             console.log(JSON.stringify(data.field));
-            if(register(data.field) == true) {
-                parent.layer.close(index);
-                return true;
-            } else {
-                return false;
-            }
+            register(data.field);
         });
     });
 
@@ -192,7 +187,6 @@
 
     //注册
     function register(params) {
-        var flag;
         $.ajax({
             type : 'post',
             async : false,
@@ -202,18 +196,15 @@
             success : function(data) {
                 if(data.success){
                     parent.layer.msg(data.message, {shift: -1, time: 1000, icon: 1}, function(){
-                        return true;
+                        window.parent.layer.close(index);
                     });
-                    flag = true;
                 }else{
                     parent.layer.msg(data.message, {shift: -1, time: 1000, icon: 2}, function(){
                         return false;
                     });
-                    flag = false;
                 }
             }
         });
-        return flag;
     }
 </script>
 </html>

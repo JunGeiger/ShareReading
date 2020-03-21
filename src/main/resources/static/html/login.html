@@ -156,12 +156,7 @@
             //监听提交
             form.on('submit(login)', function(data){
                 // console.log(JSON.stringify(data.field));
-                if(login(data.field)) {
-                    parent.layer.close(index);
-                    return true;
-                } else {
-                    return false;
-                }
+                login(data.field);
             });
         });
 
@@ -280,7 +275,6 @@
         }
         //登录
         function login(params) {
-            var flag;
             $.ajax({
                 type : 'post',
                 async : false,
@@ -290,7 +284,7 @@
                 success : function(data) {
                     if(data.success){
                         parent.layer.msg(data.message, {shift: -1, time: 1000, icon: 1}, function(){
-                            return true;
+                            window.parent.location.reload();
                         });
                         // console.log(data);
                         window.localStorage.setItem("shareReading_user_email", data.user.user_email);
@@ -302,13 +296,10 @@
                         flag = true;
                     }else{
                         parent.layer.msg(data.message, {shift: -1, time: 1000, icon: 2}, function(){
-                            return false;
                         });
-                        flag = false;
                     }
                 }
             });
-            return flag;
         }
     </script>
 </html>

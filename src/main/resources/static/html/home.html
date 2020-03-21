@@ -66,17 +66,17 @@
             }
             .middle-content {
                 background-color: #60a3bc;
-                height: 160px;
+                height: 155px;
                 width: 1280px;
                 margin: 5px auto 0;
             }
             .book-info {
-                height: 160px;
+                height: 155px;
                 width: 880px !important;
                 display: inline-block;
             }
             .other-info {
-                height: 160px;
+                height: 155px;
                 width: 400px !important;
                 background-color: #3c6382;
                 color: #e9e9e9;
@@ -88,14 +88,14 @@
             }
             .book-img {
                 display: inline-block;
-                width: 130px;
-                height: 150px;
+                width: 150px;
+                height: 140px;
                 overflow: hidden;
                 justify-content: center;
             }
             .book-img img {
-                max-width: 115px;
-                max-height: 140px;
+                max-width: 113px;
+                max-height: 135px;
                 vertical-align: middle;
                 padding: 0px 0px;
                 margin: 10px 0px 0px 15px;
@@ -156,7 +156,18 @@
                 color: #d6d6d6;
             }
             .home-bottom {
-                height: 15px;
+                height: 50px;
+                text-align: center;
+                font-size: 18px;
+                line-height: 46px;
+                color: #808080;
+                cursor: pointer;
+            }
+            .home-bottom:hover {
+                color: #464646;
+            }
+            .home-bottom:active {
+                color: #808080;
             }
             .layui-fixbar .layui-fixbar-top {
                 display: none;
@@ -188,8 +199,8 @@
                 </div>
                 <div class="layui-col-md7 content-form">
                     <div class="content-form-input">
-                        <input autocomplete="off" placeholder="请输入ISBN/书名" class="layui-input" />
-                        <button type="button" class="layui-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                        <input autocomplete="off" id="keyword" placeholder="请输入ISBN/书名" class="layui-input" />
+                        <button type="button" class="layui-btn" onclick="searchBookList();"><i class="layui-icon">&#xe615;</i>搜索</button>
                     </div>
                 </div>
                 <div class="layui-col-md2 content-account">
@@ -200,79 +211,18 @@
                 </div>
             </div>
         </div>
-        <div class="home-middle">
-            <div class="layui-row middle-content">
-                <div class="layui-col-md8 book-info">
-                    <div class="book-img">
-                        <img src="../book/image/s33525533.jpg" />
-                    </div>
-                    <div class="book-text">
-                        <p>书名: 43种濒危动物插画集</p>
-                        <p>作者: [英] 米莉·玛洛塔 / Millie Marotta</p>
-                        <p>出版社: 后浪丨四川美术出版社</p>
-                        <p>译者: 孙依静</p>
-                        <p>出版年: 2020-2</p>
-                        <p>ISBN: 9787541088841</p>
-                        <p maxlength=88>
-                            书籍简介：芳踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳踪难觅的觅的觅的觅的觅的...
-                        </p>
-                    </div>
-                </div>
-                <div class="layui-col-md4 other-info">
-                    <div class="other-info-text">
-                        <span class="other-info-comment">精选品论:</span>
-                        <span maxlength=142>
-                        芳踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳栗的栗腹鹭芳栗的栗腹鹭芳栗的栗腹鹭芳栗的栗腹鹭芳栗的栗腹鹭芳栗的栗腹鹭芳栗的栗踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳踪难觅...
-                    </span>
-                    </div>
-
-                    <div class="other-info-more">
-                        <a onclick="getMoreInfo();">查看更多<i class="layui-icon"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="home-middle">
-            <div class="layui-row middle-content">
-                <div class="layui-col-md8 book-info">
-                    <div class="book-img">
-                        <img src="../book/image/s33549420.jpg" />
-                    </div>
-                    <div class="book-text">
-                        <p>书名: 43种濒危动物插画集</p>
-                        <p>作者: [英] 米莉·玛洛塔 / Millie Marotta</p>
-                        <p>出版社: 后浪丨四川美术出版社</p>
-                        <p>译者: 孙依静</p>
-                        <p>出版年: 2020-2</p>
-                        <p>ISBN: 9787541088841</p>
-                        <p maxlength=88>
-                            书籍简介：芳踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳踪难觅的觅的觅的觅的觅的...
-                        </p>
-                    </div>
-                </div>
-                <div class="layui-col-md4 other-info">
-                    <div class="other-info-text">
-                        <span class="other-info-comment">精选品论:</span>
-                        <span maxlength=142>
-                        芳踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳栗的栗腹鹭芳栗的栗腹鹭芳栗的栗腹鹭芳栗的栗腹鹭芳栗的栗腹鹭芳栗的栗腹鹭芳栗的栗踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳踪难觅的栗的栗腹鹭芳踪难觅...
-                    </span>
-                    </div>
-
-                    <div class="other-info-more">
-                        <a onclick="getMoreInfo();">查看更多<i class="layui-icon"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div id="bookListMark"></div>
         <div class="layui-fixbar">
             <li class="layui-icon layui-fixbar-top" lay-type="top" style="display: list-item;" onclick="document.body.scrollTop = document.documentElement.scrollTop = 0;">&#xe604;</li>
         </div>
-        <div class="home-bottom"></div>
+        <div class="home-bottom" onclick="getMoreBookList();">加载更多...</div>
     </body>
     <script src="../js/jquery-3.4.1.min.js"></script>
     <script src="../layui/layui.js"></script>
     <script type="text/javascript">
         checkPermissions();
+        var page = 1;
+        var limit = 5;
         var layer;
         layui.use('layer', function(){
             layer = layui.layer;
@@ -293,9 +243,10 @@
                     login();
                 }
             }
+            getBookList(1);
         });
         //查看详情
-        function getMoreInfo() {
+        function getMoreInfo(bookId) {
             layer.open({
                 type: 2,
                 title: ['文本', 'background-color: #3c6382;color:#e9e9e9;'],
@@ -406,7 +357,7 @@
             }else if(window.localStorage.getItem("shareReading_user_level") == 1) {
                 var addBookHtml = '<button type="button" class="layui-btn" id="addBook" onclick="openAddBook();"><i class="layui-icon">&#xe654;</i>添加书籍</button>';
                 var managementHtml = '<div class="home-top management" id="management"><div class="layui-row top-content "><div class="layui-col-md2 management-button"><a>用户管理</a></div><div class="layui-col-md2 management-button"><a>权限管理</a></div><div class="layui-col-md2 management-button"><a>书籍管理</a></div><div class="layui-col-md2 management-button"></div><div class="layui-col-md2 management-button"></div><div class="layui-col-md2 management-button"></div></div></div>';
-                $(".home-top").after(managementHtml);
+                $("#bookListMark").before(managementHtml);
                 $(".content-form-input").append(addBookHtml);
             }
         }
@@ -422,6 +373,56 @@
                 content: 'addBook.html', //iframe的url
                 move: false
             });
+        }
+        function getBookList(type) {
+            var keyword = $("#keyword").val();
+            $.ajax({
+                type : 'get',
+                url : '/book/getBookList?page='+page+'&limit='+limit+'&keyword='+keyword,
+                success : function(data) {
+                    if(data.success){
+                        console.log(data.bookList);
+                        var bookList = data.bookList;
+                        var html = '';
+                        for (let i = 0; i < bookList.length; i++) {
+                            //home-top
+                            html += '<div class="home-middle"><div class="layui-row middle-content"><div class="layui-col-md8 book-info"><div class="book-img"><img src="' +
+                                bookList[i].image + '" /></div><div class="book-text"><p>书名: 《' + bookList[i].name +
+                                '》</p><p>作者: ' + bookList[i].author + '</p><p>出版社: ' + bookList[i].publisher + '</p><p>出版时间: ' + bookList[i].published + '<p>ISBN: ' + bookList[i].isbn +
+                                '</p><p maxlength=148>书籍简介：' + (bookList[i].description.length > 148 ? (bookList[i].description.substr(0,148) + '...') : bookList[i].description) +
+                                '</p></div></div><div class="layui-col-md4 other-info"><div class="other-info-text"><span class="other-info-comment">精选品论:</span><span maxlength=142>' +
+                                '</span></div><div class="other-info-more"><a onclick="getMoreInfo(' + bookList[i].id + ');">查看更多<i class="layui-icon"></i></a></div></div></div></div>';
+                        }
+                        if(type = 1) {
+                            $(".home-bottom").prop("onclick", "getMoreBookList();");
+                            $("#bookListMark").append(html);
+                        }
+                        if(type = 2) {
+                            $(".home-bottom").prop("onclick", "getMoreBookList();");
+                            $("#bookListMark").append(html);
+                        }
+                        if(type = 3) {
+                            $(".home-bottom").prop("onclick", "return false;");
+                            $("#bookListMark").html("");
+                            $("#bookListMark").append(html);
+                        }
+                    }else{
+                        layer.msg(data.message, {shift: -1, time: 1000, icon: 1}, function(){
+
+                        });
+                    }
+                }
+            });
+        }
+        //获取更多书籍
+        function getMoreBookList() {
+            page+=1;
+            getBookList(2);
+        }
+        //搜索书籍
+        function searchBookList() {
+            page=1;
+            getBookList(3);
         }
     </script>
 </html>
