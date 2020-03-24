@@ -157,6 +157,7 @@
             form.on('submit(login)', function(data){
                 // console.log(JSON.stringify(data.field));
                 login(data.field);
+                return false;
             });
         });
 

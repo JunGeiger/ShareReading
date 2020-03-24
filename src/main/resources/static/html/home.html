@@ -160,13 +160,15 @@
                 text-align: center;
                 font-size: 18px;
                 line-height: 46px;
+            }
+            .home-bottom span {
                 color: #808080;
                 cursor: pointer;
             }
-            .home-bottom:hover {
+            .home-bottom span:hover {
                 color: #464646;
             }
-            .home-bottom:active {
+            .home-bottom span:active {
                 color: #808080;
             }
             .layui-fixbar .layui-fixbar-top {
@@ -186,9 +188,17 @@
                 border-radius: 5px;
                 opacity: .95;
             }
+            .load-icon {
+                font-size: 55px;
+                position: fixed;
+                z-index: 999;
+                left: 48%;
+                top: 30%;
+            }
         </style>
     </head>
     <body>
+        <i class="layui-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop load-icon"></i>
         <div class="home-top">
             <div class="layui-row top-content">
                 <div class="layui-col-md3 content-title">
@@ -215,7 +225,7 @@
         <div class="layui-fixbar">
             <li class="layui-icon layui-fixbar-top" lay-type="top" style="display: list-item;" onclick="document.body.scrollTop = document.documentElement.scrollTop = 0;">&#xe604;</li>
         </div>
-        <div class="home-bottom" onclick="getMoreBookList();">加载更多...</div>
+        <div class="home-bottom"><span onclick="getMoreBookList();">加载更多...</span></div>
     </body>
     <script src="../js/jquery-3.4.1.min.js"></script>
     <script src="../layui/layui.js"></script>
@@ -226,6 +236,7 @@
         var layer;
         layui.use('layer', function(){
             layer = layui.layer;
+            $(".load-icon").hide();
             var params = {};
             params.id = window.localStorage.getItem("shareReading_user_id");
             params.session = window.localStorage.getItem("shareReading_user_session");
@@ -243,13 +254,14 @@
                     login();
                 }
             }
-            getBookList(1);
+            getBookList();
         });
         //查看详情
-        function getMoreInfo(bookId) {
+        function getMoreInfo(bookId, bookName) {
+            window.document.bookId = bookId;
             layer.open({
                 type: 2,
-                title: ['文本', 'background-color: #3c6382;color:#e9e9e9;'],
+                title: [bookName, 'background-color: #3c6382;color:#e9e9e9;'],
                 shadeClose: true,
                 shade: 0.8,
                 area: ['1180px', '800px'],
@@ -374,40 +386,36 @@
                 move: false
             });
         }
-        function getBookList(type) {
+        function getBookList() {
             var keyword = $("#keyword").val();
+            $(".load-icon").show();
             $.ajax({
                 type : 'get',
                 url : '/book/getBookList?page='+page+'&limit='+limit+'&keyword='+keyword,
                 success : function(data) {
+                    $(".load-icon").hide();
                     if(data.success){
-                        console.log(data.bookList);
+                        // console.log(data.bookList);
                         var bookList = data.bookList;
+                        if(bookList.length < 1) {
+                            layer.msg("没有数据哦！！！", {shift: -1, time: 1000, icon: 2}, function () {
+
+                            });
+                        }
                         var html = '';
                         for (let i = 0; i < bookList.length; i++) {
                             //home-top
                             html += '<div class="home-middle"><div class="layui-row middle-content"><div class="layui-col-md8 book-info"><div class="book-img"><img src="' +
                                 bookList[i].image + '" /></div><div class="book-text"><p>书名: 《' + bookList[i].name +
                                 '》</p><p>作者: ' + bookList[i].author + '</p><p>出版社: ' + bookList[i].publisher + '</p><p>出版时间: ' + bookList[i].published + '<p>ISBN: ' + bookList[i].isbn +
-                                '</p><p maxlength=148>书籍简介：' + (bookList[i].description.length > 148 ? (bookList[i].description.substr(0,148) + '...') : bookList[i].description) +
+                                '</p><p maxlength=130>书籍简介：' + (bookList[i].description.length > 130 ? (bookList[i].description.substr(0,130) + '...') : bookList[i].description) +
                                 '</p></div></div><div class="layui-col-md4 other-info"><div class="other-info-text"><span class="other-info-comment">精选品论:</span><span maxlength=142>' +
-                                '</span></div><div class="other-info-more"><a onclick="getMoreInfo(' + bookList[i].id + ');">查看更多<i class="layui-icon"></i></a></div></div></div></div>';
+                                '</span></div><div class="other-info-more"><a onclick="getMoreInfo(' + ( bookList[i].id + ',\'《' + bookList[i].name ) + '》\');">查看更多<i class="layui-icon"></i></a></div></div></div></div>';
                         }
-                        if(type = 1) {
-                            $(".home-bottom").prop("onclick", "getMoreBookList();");
-                            $("#bookListMark").append(html);
-                        }
-                        if(type = 2) {
-                            $(".home-bottom").prop("onclick", "getMoreBookList();");
-                            $("#bookListMark").append(html);
-                        }
-                        if(type = 3) {
-                            $(".home-bottom").prop("onclick", "return false;");
-                            $("#bookListMark").html("");
-                            $("#bookListMark").append(html);
-                        }
+                        $(".home-bottom span").attr("onclick", "getMoreBookList();");
+                        $("#bookListMark").append(html);
                     }else{
-                        layer.msg(data.message, {shift: -1, time: 1000, icon: 1}, function(){
+                        layer.msg(data.message, {shift: -1, time: 1000, icon: 2}, function(){
 
                         });
                     }
@@ -417,12 +425,19 @@
         //获取更多书籍
         function getMoreBookList() {
             page+=1;
-            getBookList(2);
+            getBookList();
+            if(page > 20) {
+                layer.msg("到底啦！！！", {shift: -1, time: 1000, icon: 2}, function(){
+
+                });
+                return false;
+            }
         }
         //搜索书籍
         function searchBookList() {
+            $("#bookListMark").html("");
             page=1;
-            getBookList(3);
+            getBookList();
         }
     </script>
 </html>

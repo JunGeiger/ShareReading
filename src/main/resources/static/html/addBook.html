@@ -176,6 +176,7 @@
                 if(data.success){
                     var book = data.book;
                     console.log(book);
+                    $("#bookIsbn").val(book.bookIsbn);
                     $("#bookName").val(book.bookName);
                     $("#bookAuthor").val(book.bookAuthor);
                     $("#bookPublisher").val(book.bookPublisher);
@@ -202,7 +203,7 @@
             }
         });
     }
-
+    //保存书籍
     function saveBook() {
         $("#saveBook").attr("disable", "true");
         if(userLevel != 1) {

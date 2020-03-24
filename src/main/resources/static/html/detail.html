@@ -160,37 +160,16 @@
             <div class="layui-row detail-content">
                 <div class="layui-col-md8 book-info">
                     <div class="book-img">
-                        <img src="../../book/image/s33525533.jpg" />
+                        <img src="../book/image/bookImageDefault.png" />
                     </div>
                     <div class="book-text">
-                        <p>作者: [英] 米莉·玛洛塔 / Millie Marotta</p>
-                        <p>出版社: 后浪丨四川美术出版社</p>
-                        <p>副标题: 43种濒危动物插画集</p>
-                        <p>译者: 孙依静</p>
-                        <p>出版年: 2020-2</p>
-                        <p>ISBN: 9787541088841</p>
-                        <p maxlength=132>
-                            书籍简介: 芳踪难觅的栗腹鹭，钟爱旅行的勺嘴鹬
-                            感情专一的虎尾海马，雌雄难辨的曲纹唇鱼
-                            从海洋到森林，由沙漠至淡水
-                            芳踪难觅的栗腹鹭，钟爱旅行的勺嘴鹬
-                            感情专一的虎尾海马，雌雄难辨的曲纹唇鱼
-                            从海洋到森林，由沙漠至淡水
-                            芳踪难觅的栗腹鹭，钟爱旅行的勺嘴鹬
-                            感情专一的虎尾海马，雌雄难辨的曲纹唇鱼
-                            感情专一的虎尾海马，雌雄难辨的曲纹唇鱼
-                            感情专一的虎尾海马，雌雄难辨的曲纹唇鱼
-                            感情专一的虎尾海马，雌雄难辨的曲纹唇鱼唇鱼芳踪难觅的栗腹鹭，钟爱旅行的勺嘴鹬
-                            感情专一的虎尾海马，雌雄难辨的曲纹唇鱼
-                            从海洋到森林，由沙漠至淡水
-                            芳踪难觅的栗腹鹭，钟爱旅行的勺嘴鹬
-                            感情专一的虎尾海马，雌雄难辨的曲纹唇鱼
-                            从海洋到森林，由沙漠至淡水
-                            芳踪难觅的栗腹鹭，钟爱旅行的勺嘴鹬
-                            感情专一的虎尾海马，雌雄难辨的曲纹唇鱼
-                            感情专一的虎尾海马，雌雄难辨的曲纹唇鱼
-                            感情专一的虎尾海马，雌雄难辨的曲纹唇鱼
-                            感情专一的虎尾海马，雌雄难辨的曲纹唇鱼唇鱼
+                        <p>书名: </p>
+                        <p>作者: </p>
+                        <p>出版社: </p>
+                        <p>出版时间: </p>
+                        <p>ISBN: </p>
+                        <p>
+                            书籍简介:
                         </p>
                     </div>
                 </div>
@@ -232,6 +211,7 @@
     <script src="../../js/jquery-3.4.1.min.js"></script>
     <script src="../../layui/layui.js"></script>
     <script type="text/javascript">
+        var bookId = window.parent.document.bookId;
         window.onload = function () {
             console.log($(".other-info").parent().parent().height())
             $(".other-info").height($(".other-info").parent().parent().height());
