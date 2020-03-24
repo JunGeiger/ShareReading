@@ -22,28 +22,23 @@
             }
             .content-form-input .layui-input {
                 width: 554px;
-                /*height: 30px;*/
                 margin-top: 12px;
                 display: inline-block;
             }
             .content-form-input .layui-btn {
-                /*height: 30px;*/
                 line-height: 30px;
                 padding: 0 12px;
             }
             .detail-content {
                 background-color: #60a3bc;
-                min-height: 150px;
                 width: 1080px;
                 margin: 10px auto 0;
             }
             .book-info {
-                /*height: 200px;*/
                 width: 880px !important;
                 display: inline-block;
             }
             .other-info {
-                /*height: 200px;*/
                 width: 200px !important;
                 background-color: #3c6382;
                 color: #e9e9e9;
@@ -54,13 +49,14 @@
                 display: inline-block;
             }
             .book-img img {
-                /*height: 180px;*/
+                height: 180px;
                 width: 140px;
                 padding: 0px 0px;
                 margin: 10px 0px 0px 20px;
             }
             .book-text {
                 width: 680px;
+                min-height: 190px;
                 display: inline-block;
                 vertical-align: top;
                 padding-top: 10px;
@@ -102,6 +98,7 @@
                 width: 1080px;
                 min-height: 150px;
                 margin: 0 auto;
+                border-bottom: solid 2px #4a69bd;
             }
             .content-user {
                 min-height: 150px;
@@ -163,19 +160,17 @@
                         <img src="../book/image/bookImageDefault.png" />
                     </div>
                     <div class="book-text">
-                        <p>书名: </p>
-                        <p>作者: </p>
-                        <p>出版社: </p>
-                        <p>出版时间: </p>
-                        <p>ISBN: </p>
-                        <p>
-                            书籍简介:
-                        </p>
+                        <p id="bookName">书名：</p>
+                        <p id="bookAuthor">作者：</p>
+                        <p id="bookPublisher">出版社：</p>
+                        <p id="bookPublished">出版时间</p>
+                        <p id="bookIsbn">ISBN：</p>
+                        <p id="bookDescription" style="white-space: pre-line;">书籍简介：</p>
                     </div>
                 </div>
                 <div class="layui-col-md4 other-info">
                     <span maxlength=182>
-                        资源地址
+                        资源地址 <p style="color: red;text-align: right;">暂无</p>
                     </span>
                 </div>
             </div>
@@ -212,13 +207,11 @@
     <script src="../../layui/layui.js"></script>
     <script type="text/javascript">
         var bookId = window.parent.document.bookId;
-        window.onload = function () {
-            console.log($(".other-info").parent().parent().height())
-            $(".other-info").height($(".other-info").parent().parent().height());
-        }
+        console.log(bookId);
         var layer;
         layui.use('layer', function(){
             layer = layui.layer;
+            getBookInfo();
         });
         //点赞
         function setLike(element) {
@@ -243,14 +236,40 @@
         function modifyComment() {
             layer.open({
                 type: 2,
-                title: ['注册', 'background-color: #3c6382;color:#e9e9e9;'],
+                title: ['编辑', 'background-color: #4a69bd;color:#e9e9e9;'],
                 shadeClose: false,
                 shade: 0.8,
-                area: ['500px', '500px'],
+                area: ['600px', '400px'],
                 // offset: ['50%', '50%'],
                 content: 'modifyComments.html', //iframe的url
                 move: false
             });
+        }
+        //根据id获取书籍信息
+        function getBookInfo() {
+            $.ajax({
+                type : 'get',
+                url : '/book/getBookInfoById?bookId=' + bookId,
+                success : function(data) {
+                    if(data.success){
+                        var bookInfo = data.bookInfo;
+                        console.log(bookInfo);
+                        $("#bookIsbn").append(bookInfo.bookIsbn);
+                        $("#bookName").append(bookInfo.bookName);
+                        $("#bookAuthor").append(bookInfo.bookAuthor);
+                        $("#bookPublisher").append(bookInfo.bookPublisher);
+                        $("#bookPublished").append(bookInfo.bookPublished);
+                        var reg = new RegExp(" ","g");
+                        $("#bookDescription").append(bookInfo.bookDescription.replace(reg,"<br/>&nbsp&nbsp"));
+                        $(".book-img").find("img").prop("src", bookInfo.bookImage);
+                    } else {
+                        layer.msg(data.message, {shift: -1, time: 1000, icon: 2}, function(){
+
+                        });
+                    }
+                }
+            });
+            $(".other-info").height($(".book-text").height());
         }
     </script>
 </html>

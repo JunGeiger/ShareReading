@@ -39,4 +39,11 @@ public interface BookService {
      * @return
      */
     HashMap<String, Object> getBookList(Integer page, Integer limit, String keyword);
+
+    /**
+     * 根据书籍id获取书籍详情
+     * @param bookId
+     * @return
+     */
+    HashMap<String, Object> getBookInfoById(String bookId);
 }

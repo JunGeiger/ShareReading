@@ -37,4 +37,12 @@ public interface BookDao {
      * @return
      */
     ArrayList<HashMap<String, Object>> getBookList(@Param("page")Integer page, @Param("limit")Integer limit, @Param("keyword")String keyword);
+
+    /**
+     * 根据书籍id获取书籍信息
+     * @param bookId
+     * @return
+     */
+    @Select("SELECT id AS bookId, book_isbn AS bookIsbn, book_name AS bookName, book_author AS bookAuthor, book_publisher AS bookPublisher, book_published AS bookPublished, book_description AS bookDescription, book_image AS bookImage FROM book WHERE id = #{bookId}")
+    HashMap<String, Object> getBookById(@Param("bookId")String bookId);
 }

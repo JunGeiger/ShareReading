@@ -195,4 +195,20 @@ public class BookServiceImpl implements BookService {
         }
         return result;
     }
+
+    @Override
+    public HashMap<String, Object> getBookInfoById(String bookId) {
+        HashMap<String, Object> result = new HashMap<>();
+        try {
+            HashMap<String, Object> bookInfo = bookDao.getBookById(bookId);
+            result.put("bookInfo", bookInfo);
+            result.put("success", true);
+            result.put("message", "获取书籍信息成功！");
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("success", false);
+            result.put("message", "获取书籍信息失败！");
+        }
+        return result;
+    }
 }

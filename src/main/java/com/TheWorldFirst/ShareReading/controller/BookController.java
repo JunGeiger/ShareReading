@@ -28,6 +28,16 @@ public class BookController {
     }
 
     /**
+     * 获取书籍信息，根据id
+     * @param bookId
+     * @return
+     */
+    @GetMapping("/getBookInfoById")
+    public HashMap<String, Object> getBookInfoById(@RequestParam(name = "bookId", required = true) String bookId) {
+        return bookService.getBookInfoById(bookId);
+    }
+
+    /**
      * 保存书籍
      * @param book
      * @return
