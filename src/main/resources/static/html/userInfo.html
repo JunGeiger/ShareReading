@@ -7,8 +7,28 @@
     <style type="text/css">
         body {
             background-color: #D8E6E7;
-            padding-top: 40px;
+            padding-top: 50px;
         }
+        #userInfo .layui-form {
+            width: 300px;
+            padding: 0;
+            margin-left: 100px;
+        }
+        #userInfo .layui-input-block {
+            line-height: 38px;
+        }
+        #userInfo .submit-content {
+            text-align: center;
+        }
+        #userInfo .submit-button {
+            width: 300px;
+        }
+        #userInfo .info-button {
+            margin-top: 20px;
+            text-align: center;
+            margin-left: 10px !important;
+        }
+
         .layui-form {
             width: 400px;
             padding: 0;
@@ -22,10 +42,13 @@
         }
         .submit-button {
             width: 300px;
-            margin-top: 20px;
         }
         .form-password{
             margin-top: 20px;
+        }
+        .forget-password {
+            line-height: 38px;
+            cursor: pointer;
         }
         .verify-email {
             line-height: 38px;
@@ -37,6 +60,9 @@
             margin-left: 110px !important;
             margin-right: 0px !important;
         }
+        .modify-password {
+            margin-top: 20px;
+        }
         .input-prompt {
             display: inline-block;
             width: 292px;
@@ -44,31 +70,48 @@
             margin-top: 5px;
             color: gray;
         }
+        #login {
+            margin-top: 30px;
+        }
     </style>
 </head>
 <body>
-<form class="layui-form" action="">
-    <div class="layui-form-item">
-        <label class="layui-form-label"></label>
-        <div class="layui-input-block">
-            <input type="text" name="username" id="username" lay-verify="username" placeholder="用户名" maxlength="16" autocomplete="off" class="layui-input">
+<div id="userInfo">
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户名:</label>
+            <div class="layui-input-block">
+                JunGeiger
+            </div>
         </div>
-        <div class="input-prompt">
-            4-16个字符，只能包括字母、数字，注册后不允许修改
+        <div class="layui-form-item">
+            <label class="layui-form-label">邮箱:</label>
+            <div class="layui-input-block">
+                1922352338@qq.com
+            </div>
         </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">注册时间:</label>
+            <div class="layui-input-block">
+                2020-03-24 18:58:13
+            </div>
+        </div>
+    </form>
+    <div class="layui-form-item submit-content">
+        <div class="layui-input-block info-button">
+            <button class="layui-btn submit-button" onclick="goUpdatePassword();">修改密码</button>
+        </div>
+        <!--<div class="layui-input-block info-button">
+            <button class="layui-btn layui-btn-normal submit-button" onclick="goUpdateEmail();">修改邮箱</button>
+        </div>-->
     </div>
+</div>
+
+<form class="layui-form layui-hide" action="" id="updatePassword">
     <div class="layui-form-item form-password">
         <label class="layui-form-label"></label>
         <div class="layui-input-inline">
             <input type="text" name="email" id="email" lay-verify="email" placeholder="邮箱" autocomplete="off" class="layui-input">
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <div class="layui-input-inline">
-            <input type="text" name="validateCode" id="validateCode" lay-verify="required" lay-reqText="请输入邮箱验证码" placeholder="邮箱验证码" autocomplete="off" class="layui-input" style="width: 200px;margin-left: 110px;">
-        </div>
-        <div class="layui-input-inline verification">
-            <a class="verify-email" onclick="countDownTimer();">获取验证码</a>
         </div>
     </div>
     <div class="layui-form-item form-password">
@@ -86,9 +129,17 @@
             <input type="password" name="rePassword" id="rePassword" lay-verify="rePassword" placeholder="重复密码" autocomplete="off" class="layui-input">
         </div>
     </div>
+    <div class="layui-form-item">
+        <div class="layui-input-inline">
+            <input type="text" name="validateCode" id="validateCode" lay-verify="required" lay-reqText="请输入邮箱验证码" placeholder="邮箱验证码" autocomplete="off" class="layui-input" style="width: 200px;margin-left: 110px;">
+        </div>
+        <div class="layui-input-inline verification">
+            <a class="verify-email" onclick="countDownTimer();">获取验证码</a>
+        </div>
+    </div>
     <div class="layui-form-item submit-content">
         <div class="layui-input-block">
-            <button class="layui-btn layui-btn-normal submit-button" lay-submit lay-filter="register">注册</button>
+            <button class="layui-btn layui-btn-normal submit-button modify-password" lay-submit lay-filter="updatePassword">修改密码</button>
         </div>
     </div>
 </form>
@@ -96,6 +147,7 @@
 <script src="../../js/jquery-3.4.1.min.js"></script>
 <script src="../../layui/layui.js"></script>
 <script type="text/javascript">
+    var userId;
     var layer;
     var form;
     var index;
@@ -103,19 +155,12 @@
         layer = layui.layer;
         form = layui.form;
         index = parent.layer.getFrameIndex(window.name);
+        userId = window.parent.document.userId;
         //parent.layer.close(index);
         //监听提交
         // /^[A-Za-z0-9]{4,10}$/ /^[0-9]*$/ 用户名验证：只能包括数字、字母，一次性不能修改，4-16个字符
         // /(?!.*\s)(?!^[\u4e00-\u9fa5]+$)(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^.{8,16}$/ 密码验证：8-16个字符,不包含空格,必须包含数字,字母或字符至少两种
         form.verify({
-            username: function (value, item) {
-                if(!/^[A-Za-z0-9]{4,16}$/.test(value)) {
-                   return '用户名不符合要求！';
-                }
-                if(/^[0-9]*$/.test(value)) {
-                    return '用户名不能全为数字！';
-                }
-            },
             password: [
                 /(?!.*\s)(?!^[\u4e00-\u9fa5]+$)(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^.{8,16}$/
                 ,'密码不符合要求！'
@@ -126,11 +171,23 @@
                 }
             }
         });
-        form.on('submit(register)', function(data){
-            console.log(JSON.stringify(data.field));
-            register(data.field);
+        //监听提交
+        form.on('submit(updatePassword)', function(data){
+            // console.log(JSON.stringify(data.field));
+            if(updatePassword(data.field)) {
+                return true;
+            } else {
+                return false;
+            }
         });
     });
+
+    //忘记密码-->修改密码
+    function goUpdatePassword() {
+        $("#userInfo").addClass("layui-hide");
+        $("#updatePassword").removeClass("layui-hide");
+        $("body").prop("style", "padding-top: 10px;");
+    }
 
     // 获取验证码
     function countDownTimer(){
@@ -154,6 +211,9 @@
                 return;
             }
         },1000);
+        if(!existUserByEmail($("#email").val())){
+            return false;
+        }
         sendValidateCode($("#email").val());
     }
 
@@ -185,26 +245,54 @@
         });
     }
 
-    //注册
-    function register(params) {
+    //根据邮箱查看是否存在用户
+    function existUserByEmail(eMail) {
+        var flag;
+        $.ajax({
+            type : 'get',
+            async : false,
+            url : '/user/existUserByEmail?eMail='+eMail,
+            success : function(data) {
+                if(data.success){
+                    flag = true;
+                }else{
+                    layer.msg(data.message, {shift: -1, time: 1000, icon: 2});
+                    flag = false;
+                }
+            }
+        });
+        return flag;
+    }
+
+    //修改密码
+    function updatePassword(params) {
+        var flag;
         $.ajax({
             type : 'post',
             async : false,
-            url : '/user/register',
+            url : '/user/updatePassword',
             contentType : 'application/json;charset=UTF-8',
             data : JSON.stringify(params),
             success : function(data) {
                 if(data.success){
+                    window.localStorage.setItem("shareReading_user_email", undefined);
+                    window.localStorage.setItem("shareReading_user_level", undefined);
+                    window.localStorage.setItem("shareReading_user_name", undefined);
+                    window.localStorage.setItem("shareReading_user_id", undefined);
+                    window.localStorage.setItem("shareReading_user_session", undefined);
+                    window.localStorage.setItem("shareReading_user_session_time", undefined);
                     parent.layer.msg(data.message, {shift: -1, time: 1000, icon: 1}, function(){
-                        window.parent.layer.close(index);
+                        window.parent.location.reload();
                     });
+                    flag = true;
                 }else{
                     parent.layer.msg(data.message, {shift: -1, time: 1000, icon: 2}, function(){
-                        return false;
                     });
+                    flag = false;
                 }
             }
         });
+        return flag;
     }
 </script>
 </html>
