@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link type="text/css" rel="stylesheet" href="../../layui/css/layui.css" />
+    <style type="text/css">
+        body {
+            background-color: #D8E6E7;
+            padding-top: 30px;
+        }
+        .ideaInput {
+            resize: none;height: 230px;width: 500px;margin-left: 50px;
+        }
+        .ideaSubmit {
+            float: right;margin-right: 20px;
+        }
+    </style>
+</head>
+<body>
+    <textarea placeholder="请输入内容(<=150字)" class="layui-textarea ideaInput" maxlength="150" id="ideaInput"></textarea>
+    <div style="margin-top: 20px;width: 500px;margin-left: 50px;">
+        <button class="layui-btn layui-btn-normal ideaSubmit" onclick="submitComment();">立即提交</button>
+    </div>
+</body>
+<script src="../../js/jquery-3.4.1.min.js"></script>
+<script src="../../layui/layui.js"></script>
+<script type="text/javascript">
+    var layer;
+    var bookId = window.parent.document.bookId;
+    layui.use(['layer'], function(){
+        layer = layui.layer;
+    });
+    function submitComment() {
+        var idea = $("#ideaInput").val();
+        if(idea == "") {
+            layer.msg("不能空白提交哦!", {shift: -1, time: 1000, icon: 2}, function(){
+
+            });
+            return false;
+        }
+        $.ajax({
+            type : 'post',
+            async : false,
+            url : '/user/login',
+            contentType : 'application/json;charset=UTF-8',
+            data : JSON.stringify(params),
+            success : function(data) {
+                if(data.success){
+                    parent.layer.msg(data.message, {shift: -1, time: 1000, icon: 1}, function(){
+                        window.parent.location.reload();
+                    });
+                    // console.log(data);
+                    window.localStorage.setItem("shareReading_user_email", data.user.user_email);
+                    window.localStorage.setItem("shareReading_user_level", data.user.level);
+                    window.localStorage.setItem("shareReading_user_name", data.user.user_name);
+                    window.localStorage.setItem("shareReading_user_id", data.user.id);
+                    window.localStorage.setItem("shareReading_user_session", data.user.session);
+                    window.localStorage.setItem("shareReading_user_session_time", data.user.time);
+                    flag = true;
+                }else{
+                    parent.layer.msg(data.message, {shift: -1, time: 1000, icon: 2}, function(){
+                    });
+                }
+            }
+        });
+    }
+</script>
+</html>

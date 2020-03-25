@@ -180,8 +180,9 @@
                 <span><a class="comment-select-a comment-selected" onclick="getOrderBy(this);">最新</a></span>
                 <span>/</span>
                 <span><a class="comment-select-a" onclick="getOrderBy(this);">最热</a></span>
+                <span style="float: right;margin-right: 20px"><a onclick="addComment();">发表品论</a></span>
             </div>
-            <div class="layui-row comment-content">
+            <!--<div class="layui-row comment-content">
                 <div class="layui-col-md2 content-user">
                     <div class="content-username">重度书虫重度书虫重度书虫</div>
                     <div class="content-like"><i class="layui-icon">&#xe6c6;</i>116</div>
@@ -200,7 +201,7 @@
                     <button class="layui-btn layui-btn-danger layui-btn-sm">删除</button>
                     <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="setLike(this);" like="0"><i class="layui-icon">&#xe6c6;</i></button>
                 </div>
-            </div>
+            </div>-->
         </div>
     </body>
     <script src="../../js/jquery-3.4.1.min.js"></script>
@@ -245,6 +246,22 @@
                 move: false
             });
         }
+
+        //打开评论新增窗口
+        function addComment() {
+            window.document.bookId = bookId;
+            layer.open({
+                type: 2,
+                title: ['分享你的想法', 'background-color: #4a69bd;color:#e9e9e9;'],
+                shadeClose: false,
+                shade: 0.8,
+                area: ['600px', '400px'],
+                // offset: ['50%', '50%'],
+                content: 'addComments.html', //iframe的url
+                move: false
+            });
+        }
+
         //根据id获取书籍信息
         function getBookInfo() {
             $.ajax({
@@ -262,6 +279,8 @@
                         var reg = new RegExp(" ","g");
                         $("#bookDescription").append(bookInfo.bookDescription.replace(reg,"<br/>&nbsp&nbsp"));
                         $(".book-img").find("img").prop("src", bookInfo.bookImage);
+
+                        $(".other-info").height($(".book-info")[0].clientHeight)
                     } else {
                         layer.msg(data.message, {shift: -1, time: 1000, icon: 2}, function(){
 
@@ -269,7 +288,6 @@
                     }
                 }
             });
-            $(".other-info").height($(".book-text").height());
         }
     </script>
 </html>

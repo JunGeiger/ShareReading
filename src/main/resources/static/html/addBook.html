@@ -248,12 +248,12 @@
                     layer.msg(data.message, {shift: -1, time: 1000, icon: 1}, function(){
                         window.parent.location.reload();
                     });
-                } else {
-                    layer.msg(data.message, {shift: -1, time: 1000, icon: 2}, function(){
-
-                    });
                 }
+            },
+            error : function () {
+                layer.msg("保存失败！", {shift: -1, time: 1000, icon: 2}, function(){
 
+                });
             }
         });
     }

@@ -168,15 +168,9 @@ public class BookServiceImpl implements BookService {
             result.put("message", "书籍已存在无需重复添加！");
             return result;
         }
-        try {
-            bookDao.saveBook((HashMap<String, Object>) params.get("book"));
-            result.put("success", true);
-            result.put("message", "保存成功！");
-        } catch (Exception e) {
-            e.printStackTrace();
-            result.put("success", false);
-            result.put("message", "保存失败！");
-        }
+        bookDao.saveBook((HashMap<String, Object>) params.get("book"));
+        result.put("success", true);
+        result.put("message", "保存成功！");
         return result;
     }
 

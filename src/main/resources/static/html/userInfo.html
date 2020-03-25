@@ -241,6 +241,11 @@
 
                     });
                 }
+            },
+            error : function () {
+                layer.msg("验证码保存失败，请联系管理员处理！", {shift: -1, time: 1000, icon: 2}, function(){
+
+                });
             }
         });
     }
@@ -290,6 +295,12 @@
                     });
                     flag = false;
                 }
+            },
+            error : function () {
+                parent.layer.msg("修改失败，请联系管理员！", {shift: -1, time: 1000, icon: 2}, function(){
+                    return false;
+                });
+                flag = false;
             }
         });
         return flag;
