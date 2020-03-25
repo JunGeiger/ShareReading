@@ -372,7 +372,7 @@
                 return false;
             }else if(window.localStorage.getItem("shareReading_user_level") == 1) {
                 var addBookHtml = '<button type="button" class="layui-btn" id="addBook" onclick="openAddBook();"><i class="layui-icon">&#xe654;</i>添加书籍</button>';
-                var managementHtml = '<div class="home-top management" id="management"><div class="layui-row top-content "><div class="layui-col-md2 management-button"><a>用户管理</a></div><div class="layui-col-md2 management-button"><a>权限管理</a></div><div class="layui-col-md2 management-button"><a>书籍管理</a></div><div class="layui-col-md2 management-button"></div><div class="layui-col-md2 management-button"></div><div class="layui-col-md2 management-button"></div></div></div>';
+                var managementHtml = '<div class="home-top management layui-hide" id="management"><div class="layui-row top-content "><div class="layui-col-md2 management-button"><a>用户管理</a></div><div class="layui-col-md2 management-button"><a>权限管理</a></div><div class="layui-col-md2 management-button"><a>书籍管理</a></div><div class="layui-col-md2 management-button"></div><div class="layui-col-md2 management-button"></div><div class="layui-col-md2 management-button"></div></div></div>';
                 $("#bookListMark").before(managementHtml);
                 $(".content-form-input").append(addBookHtml);
             }
