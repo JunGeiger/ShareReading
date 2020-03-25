@@ -39,6 +39,7 @@
             });
             return false;
         }
+        window.parent.location.reload();
         $.ajax({
             type : 'post',
             async : false,
@@ -50,18 +51,13 @@
                     parent.layer.msg(data.message, {shift: -1, time: 1000, icon: 1}, function(){
                         window.parent.location.reload();
                     });
-                    // console.log(data);
-                    window.localStorage.setItem("shareReading_user_email", data.user.user_email);
-                    window.localStorage.setItem("shareReading_user_level", data.user.level);
-                    window.localStorage.setItem("shareReading_user_name", data.user.user_name);
-                    window.localStorage.setItem("shareReading_user_id", data.user.id);
-                    window.localStorage.setItem("shareReading_user_session", data.user.session);
-                    window.localStorage.setItem("shareReading_user_session_time", data.user.time);
-                    flag = true;
                 }else{
                     parent.layer.msg(data.message, {shift: -1, time: 1000, icon: 2}, function(){
                     });
                 }
+            },
+            error : function () {
+
             }
         });
     }
