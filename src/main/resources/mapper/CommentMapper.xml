@@ -2,5 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.TheWorldFirst.ShareReading.dao.CommentDao">
-
+    <insert id="saveComment" parameterType="java.util.HashMap">
+        INSERT INTO comment (comment, user_id, book_id, createTime) VALUES(#{comment.comment}, #{comment.userId}, #{comment.bookId}, NOW())
+    </insert>
+    <insert id="saveLike" parameterType="java.util.HashMap">
+        INSERT INTO `like` (comment_id, user_id, createTime) VALUES(#{like.commentId}, #{like.userId}, NOW())
+    </insert>
+    <select id="getCommentList" resultType="java.util.HashMap">
+        SELECT
+            c.id,
+            c.comment,
+            c.user_id AS userId,
+            c.book_id AS bookId,
+            c.createTime,
+            u.user_name AS userName,
+            (SELECT COUNT(1) FROM `like` AS l WHERE l.comment_id = c.id) AS likeNumber
+        FROM
+            comment AS c
+            LEFT JOIN `user` AS u ON c.user_id = u.id
+        WHERE c.book_id = #{bookId}
+            ORDER BY #{orderBy}
+    </select>
 </mapper>

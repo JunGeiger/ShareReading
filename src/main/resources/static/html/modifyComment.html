@@ -18,19 +18,67 @@
     </style>
 </head>
 <body>
-<textarea placeholder="请输入内容(<=150字)" class="layui-textarea ideaInput" maxlength="150"></textarea>
+<textarea placeholder="请输入内容(<=200字)" class="layui-textarea ideaInput" id="ideaInput" maxlength="200"></textarea>
 <div style="margin-top: 20px;width: 500px;margin-left: 50px;">
-    <button class="layui-btn layui-btn-normal ideaSubmit">立即提交</button>
+    <button class="layui-btn layui-btn-normal ideaSubmit" onclick="submitComment();">立即提交</button>
 </div>
 </body>
 <script src="../../js/jquery-3.4.1.min.js"></script>
 <script src="../../layui/layui.js"></script>
 <script type="text/javascript">
     var layer;
-    var form;
-    layui.use(['layer', 'form'], function(){
+    var index = parent.layer.getFrameIndex(window.name);
+    var commentId = window.parent.document.commentId;
+    var commentContent = window.parent.document.commentContent;
+    var session = window.localStorage.getItem("shareReading_user_session");
+    var userId = window.localStorage.getItem("shareReading_user_id");
+    var userLevel = window.localStorage.getItem("shareReading_user_level");
+    layui.use(['layer'], function(){
         layer = layui.layer;
-        form = layui.form;
+        $("#ideaInput").val(commentContent);
+        console.log(commentContent);
     });
+    function submitComment() {
+        var idea = $("#ideaInput").val();
+        if(idea == "") {
+            layer.msg("不能空白提交哦!", {shift: -1, time: 1000, icon: 2}, function(){
+
+            });
+            return false;
+        }
+        if(userLevel > 2) {
+            layer.msg("您没有这个权限！", {shift: -1, time: 1000, icon: 2}, function(){
+
+            });
+            return false;
+        }
+        var params = {};
+        params.userId = userId;
+        params.session = session;
+        params.commentId = commentId;
+        params.comment = idea;
+        console.log(params);
+        $.ajax({
+            type : 'post',
+            async : false,
+            url : '/comment/updateComment',
+            contentType : 'application/json;charset=UTF-8',
+            data : JSON.stringify(params),
+            success : function(data) {
+                if(data.success){
+                    parent.layer.msg(data.message, {shift: -1, time: 1000, icon: 1}, function(){
+                        window.parent.layer.close(index);
+                    });
+                }else{
+                    parent.layer.msg(data.message, {shift: -1, time: 1000, icon: 2}, function(){
+                    });
+                }
+            },
+            error : function () {
+                parent.layer.msg("修改失败", {shift: -1, time: 1000, icon: 2}, function(){
+                });
+            }
+        });
+    }
 </script>
 </html>

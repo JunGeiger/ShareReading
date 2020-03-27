@@ -18,16 +18,20 @@
     </style>
 </head>
 <body>
-    <textarea placeholder="请输入内容(<=150字)" class="layui-textarea ideaInput" maxlength="150" id="ideaInput"></textarea>
+    <textarea placeholder="请输入内容(<=200字)" class="layui-textarea ideaInput" maxlength="200" id="ideaInput"></textarea>
     <div style="margin-top: 20px;width: 500px;margin-left: 50px;">
-        <button class="layui-btn layui-btn-normal ideaSubmit" onclick="submitComment();">立即提交</button>
+        <button class="layui-btn layui-btn-normal ideaSubmit" onclick="submitComment();">立即发表</button>
     </div>
 </body>
 <script src="../../js/jquery-3.4.1.min.js"></script>
 <script src="../../layui/layui.js"></script>
 <script type="text/javascript">
     var layer;
+    var index = parent.layer.getFrameIndex(window.name);
     var bookId = window.parent.document.bookId;
+    var session = window.localStorage.getItem("shareReading_user_session");
+    var userId = window.localStorage.getItem("shareReading_user_id");
+    var userLevel = window.localStorage.getItem("shareReading_user_level");
     layui.use(['layer'], function(){
         layer = layui.layer;
     });
@@ -39,17 +43,27 @@
             });
             return false;
         }
-        window.parent.location.reload();
+        if(userLevel > 2) {
+            layer.msg("您没有这个权限！", {shift: -1, time: 1000, icon: 2}, function(){
+
+            });
+            return false;
+        }
+        var params = {};
+        params.userId = userId;
+        params.session = session;
+        params.bookId = bookId;
+        params.comment = idea;
         $.ajax({
             type : 'post',
             async : false,
-            url : '/user/login',
+            url : '/comment/addComment',
             contentType : 'application/json;charset=UTF-8',
             data : JSON.stringify(params),
             success : function(data) {
                 if(data.success){
                     parent.layer.msg(data.message, {shift: -1, time: 1000, icon: 1}, function(){
-                        window.parent.location.reload();
+                        window.parent.layer.close(index);
                     });
                 }else{
                     parent.layer.msg(data.message, {shift: -1, time: 1000, icon: 2}, function(){
@@ -57,7 +71,8 @@
                 }
             },
             error : function () {
-
+                parent.layer.msg("发表失败", {shift: -1, time: 1000, icon: 2}, function(){
+                });
             }
         });
     }

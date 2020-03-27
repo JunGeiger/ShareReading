@@ -182,6 +182,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public String verifyNormalUserPermission(String session, String userId) {
+        try {
+            HashMap<String, Object> existLogin = userDao.getLoginSession(userId, session);
+            if(existLogin == null) {
+                return "登录信息失效，请重新登录！";
+            } else {
+                HashMap<String, Object> user = userDao.getUserInfo(userId);
+                if(((Integer) user.get("level") > 2)) {
+                    return"您没有这个权限！";
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "false";
+        }
+        return "true";
+    }
+
+    @Override
     @Transactional
     public HashMap<String, Object> getValidateCode(String eMail) {
         HashMap<String, Object> result = new HashMap<>();

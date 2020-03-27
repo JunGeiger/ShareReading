@@ -52,4 +52,12 @@ public interface UserService {
      * @return
      */
     String verifyUserPermission(String session, String userId);
+
+    /**
+     * 验证用户登录和权限(普通用户)
+     * @param session
+     * @param userId
+     * @return
+     */
+    String verifyNormalUserPermission(String session, String userId);
 }
