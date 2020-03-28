@@ -50,8 +50,8 @@ public class CommentController {
      * @return
      */
     @GetMapping("/getCommentList")
-    public HashMap<String, Object> getCommentList(@RequestParam("bookId") Integer bookId, @RequestParam("orderBy") String orderBy) {
-        return commentService.getCommentList(bookId, orderBy);
+    public HashMap<String, Object> getCommentList(@RequestParam("bookId") Integer bookId, @RequestParam("orderBy") String orderBy, @RequestParam("userId") String userId) {
+        return commentService.getCommentList(bookId, orderBy, userId);
     }
 
     /**

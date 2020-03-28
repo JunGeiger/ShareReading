@@ -356,7 +356,7 @@
             // console.log(commentOrderBy);
             $.ajax({
                 type : 'get',
-                url : '/comment/getCommentList?orderBy=' + commentOrderBy + "&bookId=" + bookId,
+                url : '/comment/getCommentList?orderBy=' + commentOrderBy + "&bookId=" + bookId + "&userId=" + userId,
                 success : function(data) {
                     if(data.success){
                         // console.log(data);

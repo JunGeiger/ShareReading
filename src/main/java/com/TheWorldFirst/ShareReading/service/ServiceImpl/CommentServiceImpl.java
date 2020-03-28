@@ -41,10 +41,10 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public HashMap<String, Object> getCommentList(Integer bookId, String orderBy) {
+    public HashMap<String, Object> getCommentList(Integer bookId, String orderBy, String userId) {
         HashMap<String, Object> result = new HashMap<>();
         try {
-            ArrayList<HashMap<String, Object>> commentList = commentDao.getCommentList(bookId, orderBy);
+            ArrayList<HashMap<String, Object>> commentList = commentDao.getCommentList(bookId, orderBy, userId);
             result.put("commentList", commentList);
             result.put("success", true);
             result.put("message", "获取评论成功！");

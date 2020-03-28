@@ -17,7 +17,7 @@ public interface CommentService {
      * @param orderBy
      * @return
      */
-    HashMap<String, Object> getCommentList(Integer bookId, String orderBy);
+    HashMap<String, Object> getCommentList(Integer bookId, String orderBy, String userId);
 
     /**
      * 修改评论

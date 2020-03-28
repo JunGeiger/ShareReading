@@ -25,7 +25,7 @@ public interface CommentDao {
      * @param orderBy
      * @return
      */
-    ArrayList<HashMap<String, Object>> getCommentList(@Param("bookId")Integer bookId, @Param("orderBy")String orderBy);
+    ArrayList<HashMap<String, Object>> getCommentList(@Param("bookId")Integer bookId, @Param("orderBy")String orderBy, @Param("userId")String userId);
 
     /**
      * 修改评论
