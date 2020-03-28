@@ -403,6 +403,7 @@
                     if(data.success){
                         // console.log(data.bookList);
                         var bookList = data.bookList;
+                        console.log(bookList);
                         if(bookList.length < 1) {
                             layer.msg("没有数据哦！！！", {shift: -1, time: 1000, icon: 2}, function () {
 
@@ -411,11 +412,19 @@
                         var html = '';
                         for (let i = 0; i < bookList.length; i++) {
                             //home-top
+                            var bestComment = '';
+                            if(bookList[i].bestComment != undefined) {
+                                bestComment = "  " + bookList[i].bestComment;
+                            }
+                            if(bestComment.length > 136) {
+                                bestComment = bestComment.substr(0, 136)+"...";
+                            }
                             html += '<div class="home-middle"><div class="layui-row middle-content"><div class="layui-col-md8 book-info"><div class="book-img"><img src="' +
                                 bookList[i].image + '" /></div><div class="book-text"><p>书名: 《' + bookList[i].name +
                                 '》</p><p>作者: ' + bookList[i].author + '</p><p>出版社: ' + bookList[i].publisher + '</p><p>出版时间: ' + bookList[i].published + '<p>ISBN: ' + bookList[i].isbn +
                                 '</p><p maxlength=130>书籍简介：' + (bookList[i].description.length > 130 ? (bookList[i].description.substr(0,130) + '...') : bookList[i].description) +
-                                '</p></div></div><div class="layui-col-md4 other-info"><div class="other-info-text"><span class="other-info-comment">精选品论:</span><span maxlength=142>' +
+                                '</p></div></div><div class="layui-col-md4 other-info"><div class="other-info-text"><span class="other-info-comment" maxlength = 136>精选品论:' + bestComment +
+                                '</span><span maxlength=142>' +
                                 '</span></div><div class="other-info-more"><a onclick="getMoreInfo(' + ( bookList[i].id + ',\'《' + bookList[i].name ) + '》\');">查看更多<i class="layui-icon"></i></a></div></div></div></div>';
                         }
                         $(".home-bottom span").attr("onclick", "getMoreBookList();");

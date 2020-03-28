@@ -9,22 +9,23 @@
     </insert>
     <select id="getBookList" resultType="java.util.HashMap">
         SELECT
-            id,
-            book_isbn AS isbn,
-            book_name AS 'name',
-            book_author AS author,
-            book_publisher AS publisher,
-            book_published AS published,
-            book_description AS description,
-            book_image AS image
+            b.id,
+            b.book_isbn AS isbn,
+            b.book_name AS 'name',
+            b.book_author AS author,
+            b.book_publisher AS publisher,
+            b.book_published AS published,
+            b.book_description AS description,
+            b.book_image AS image,
+            (SELECT c.`comment` FROM `like` AS l LEFT JOIN `comment` AS c ON c.id = l.comment_id WHERE c.book_id = b.id GROUP BY c.id ORDER BY count( 1 ) DESC LIMIT 0,1) AS bestComment
         FROM
-            book
+            book AS b
             WHERE 1=1
         <if test="keyword != null and keyword != ''">
-            AND ((book_isbn LIKE CONCAT('%',#{keyword},'%')) OR (book_name LIKE CONCAT('%',#{keyword},'%')))
+            AND ((b.book_isbn LIKE CONCAT('%',#{keyword},'%')) OR (b.book_name LIKE CONCAT('%',#{keyword},'%')))
         </if>
         ORDER BY
-            createTime DESC
+            b.createTime DESC
             LIMIT ${(page-1)*limit},${limit}
     </select>
 </mapper>
