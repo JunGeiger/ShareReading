@@ -36,7 +36,7 @@
     layui.use(['layer'], function(){
         layer = layui.layer;
         $("#ideaInput").val(commentContent);
-        console.log(commentContent);
+        // console.log(commentContent);
     });
     function submitComment() {
         var idea = $("#ideaInput").val();
@@ -57,7 +57,7 @@
         params.session = session;
         params.commentId = commentId;
         params.comment = idea;
-        console.log(params);
+        // console.log(params);
         $.ajax({
             type : 'post',
             async : false,

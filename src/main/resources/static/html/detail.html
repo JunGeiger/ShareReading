@@ -207,7 +207,7 @@
         layui.use('layer', function(){
             layer = layui.layer;
             getBookInfo();
-            console.log(commentOrderBy);
+            // console.log(commentOrderBy);
             getBookComment();
         });
         //点赞
@@ -268,7 +268,7 @@
         //根据最新，最热排序
         function getOrderBy(element) {
             commentOrderBy = $(element).attr("orderBy");
-            console.log(commentOrderBy);
+            // console.log(commentOrderBy);
             $(".comment-select-a").removeClass("comment-selected");
             $(element).addClass("comment-selected");
             getBookComment();
@@ -353,13 +353,13 @@
 
         //根据id获取书籍评论
         function getBookComment() {
-            console.log(commentOrderBy);
+            // console.log(commentOrderBy);
             $.ajax({
                 type : 'get',
                 url : '/comment/getCommentList?orderBy=' + commentOrderBy + "&bookId=" + bookId,
                 success : function(data) {
                     if(data.success){
-                        console.log(data);
+                        // console.log(data);
                         var commentList = data.commentList;
                         var html = "";
                         for (let i = 0; i < commentList.length; i++) {
