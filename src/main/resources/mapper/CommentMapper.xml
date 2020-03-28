@@ -5,8 +5,8 @@
     <insert id="saveComment" parameterType="java.util.HashMap">
         INSERT INTO comment (comment, user_id, book_id, createTime) VALUES(#{comment.comment}, #{comment.userId}, #{comment.bookId}, NOW())
     </insert>
-    <insert id="saveLike" parameterType="java.util.HashMap">
-        INSERT INTO `like` (comment_id, user_id, createTime) VALUES(#{like.commentId}, #{like.userId}, NOW())
+    <insert id="addLike" parameterType="java.util.HashMap">
+        INSERT INTO `like` (comment_id, user_id, createTime) VALUES(#{commentId}, #{userId}, NOW())
     </insert>
     <select id="getCommentList" resultType="java.util.HashMap">
         SELECT
@@ -16,11 +16,13 @@
             c.book_id AS bookId,
             c.createTime,
             u.user_name AS userName,
+            l.id AS likeId,
             (SELECT COUNT(1) FROM `like` AS l WHERE l.comment_id = c.id) AS likeNumber
         FROM
             comment AS c
             LEFT JOIN `user` AS u ON c.user_id = u.id
+            LEFT JOIN `like` AS l ON l.user_id = u.id AND l.comment_id = c.id
         WHERE c.book_id = #{bookId}
-            ORDER BY #{orderBy}
+            ORDER BY ${orderBy} DESC
     </select>
 </mapper>

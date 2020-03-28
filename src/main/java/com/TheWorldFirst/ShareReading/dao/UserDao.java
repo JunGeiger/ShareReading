@@ -58,7 +58,7 @@ public interface UserDao {
      * 用户注册
      * @param user
      */
-    void register(@Param("params")HashMap<String, Object> user);
+    Long register(@Param("params")HashMap<String, Object> user);
 
     /**
      * 根据用户名查找用户(严格区分大小写)
@@ -97,4 +97,12 @@ public interface UserDao {
      */
     @Select("SELECT u.id, u.user_name, u.user_email, l.`level` FROM `user` AS u LEFT JOIN role AS r ON u.id = r.user_id LEFT JOIN `level` AS l ON l.id = r.level_id WHERE u.id = #{id} ")
     HashMap<String, Object> getUserInfo(@Param("id") String id);
+
+    /**
+     * 用户初始注册权限
+     * @param userId
+     * @param levelId
+     */
+    @Insert("INSERT INTO `role` ( user_id, level_id ) VALUES (#{userId}, #{levelId})")
+    void addNormalLevel(@Param("userId") Long userId, @Param("levelId") Long levelId);
 }

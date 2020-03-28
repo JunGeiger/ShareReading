@@ -39,7 +39,8 @@ public class UserServiceImpl implements UserService {
         } else {
             if (emailCode != null) {
                 if(emailCode.get("validateCode").equals(user.get("validateCode"))) {
-                    userDao.register(user);
+                    Long id = userDao.register(user);
+                    userDao.addNormalLevel(id, 2l);
                     result.put("success", true);
                     result.put("message", "注册成功！");
                 } else {

@@ -2,11 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.TheWorldFirst.ShareReading.dao.UserDao">
-    <insert id="register" parameterType="java.util.HashMap">
-        INSERT INTO `user` ( user_name, user_email, user_password, createTime )
-        VALUES
-        (#{params.username}, #{params.email}, #{params.password}, NOW())
-    </insert>
+    <select id="register" parameterType="java.util.HashMap" resultType="java.lang.Long">
+        CALL saveUser_ReturnId(#{params.username}, #{params.email}, #{params.password});
+    </select>
     <update id="updatePassword" parameterType="java.util.HashMap">
         UPDATE `user`
         SET

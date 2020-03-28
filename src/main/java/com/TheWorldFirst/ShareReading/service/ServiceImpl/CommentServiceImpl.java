@@ -76,4 +76,68 @@ public class CommentServiceImpl implements CommentService {
         result.put("message", "修改成功！");
         return result;
     }
+
+    @Override
+    @Transactional
+    public HashMap<String, Object> delComment(HashMap<String, Object> comment) {
+        HashMap<String, Object> result = new HashMap<>();
+        String permission = userService.verifyNormalUserPermission((String) comment.get("session"), (String) comment.get("userId"));
+        if(!permission.equals("true")) {
+            if (permission.equals("false")) {
+                result.put("success", false);
+                result.put("message", "用户信息验证错误，请退出重新登录！");
+                return result;
+            }
+            result.put("success", false);
+            result.put("message", permission);
+            return result;
+        }
+        commentDao.delComment((Integer)comment.get("commentId"));
+        commentDao.delAllLike((Integer)comment.get("commentId"));
+        result.put("success", true);
+        result.put("message", "删除成功！");
+        return result;
+    }
+
+    @Override
+    @Transactional
+    public HashMap<String, Object> addLike(HashMap<String, Object> like) {
+        HashMap<String, Object> result = new HashMap<>();
+        String permission = userService.verifyNormalUserPermission((String) like.get("session"), (String) like.get("userId"));
+        if(!permission.equals("true")) {
+            if (permission.equals("false")) {
+                result.put("success", false);
+                result.put("message", "用户信息验证错误，请退出重新登录！");
+                return result;
+            }
+            result.put("success", false);
+            result.put("message", permission);
+            return result;
+        }
+        commentDao.addLike((String)like.get("commentId"), (String) like.get("userId"));
+        result.put("success", true);
+        result.put("message", "点赞成功！");
+        return result;
+    }
+
+    @Override
+    @Transactional
+    public HashMap<String, Object> delLike(HashMap<String, Object> like) {
+        HashMap<String, Object> result = new HashMap<>();
+        String permission = userService.verifyNormalUserPermission((String) like.get("session"), (String) like.get("userId"));
+        if(!permission.equals("true")) {
+            if (permission.equals("false")) {
+                result.put("success", false);
+                result.put("message", "用户信息验证错误，请退出重新登录！");
+                return result;
+            }
+            result.put("success", false);
+            result.put("message", permission);
+            return result;
+        }
+        commentDao.delLike((String)like.get("commentId"), (String) like.get("userId"));
+        result.put("success", true);
+        result.put("message", "删除成功！");
+        return result;
+    }
 }

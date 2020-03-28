@@ -25,4 +25,25 @@ public interface CommentService {
      * @return
      */
     HashMap<String, Object> updateComment(HashMap<String, Object> comment);
+
+    /**
+     * 删除评论
+     * @param comment
+     * @return
+     */
+    HashMap<String, Object> delComment(HashMap<String, Object> comment);
+
+    /**
+     * 点赞
+     * @param like
+     * @return
+     */
+    HashMap<String, Object> addLike(HashMap<String, Object> like);
+
+    /**
+     * 取消点赞
+     * @param like
+     * @return
+     */
+    HashMap<String, Object> delLike(HashMap<String, Object> like);
 }

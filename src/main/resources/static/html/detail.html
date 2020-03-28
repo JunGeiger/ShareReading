@@ -186,9 +186,9 @@
         </div>
         <div class="detail-comment">
             <div class="layui-row comment-select">
-                <span><a class="comment-select-a comment-selected" data="createTime" onclick="getOrderBy(this);">最新</a></span>
+                <span><a class="comment-select-a comment-selected" orderBy="c.createTime" onclick="getOrderBy(this);">最新</a></span>
                 <span>/</span>
-                <span><a class="comment-select-a" data="likeNumber" onclick="getOrderBy(this);">最热</a></span>
+                <span><a class="comment-select-a" orderBy="likeNumber" onclick="getOrderBy(this);">最热</a></span>
                 <span style="float: right;margin-right: 20px"><a onclick="addComment();">发表品论</a></span>
             </div>
             <div id="commentList">
@@ -201,15 +201,29 @@
     <script type="text/javascript">
         var bookId = window.parent.document.bookId;
         var userId = window.localStorage.getItem("shareReading_user_id");
+        var session = window.localStorage.getItem("shareReading_user_session");
         var layer;
         var commentOrderBy = "c.createTime";
         layui.use('layer', function(){
             layer = layui.layer;
             getBookInfo();
-            getBookComment(commentOrderBy);
+            console.log(commentOrderBy);
+            getBookComment();
         });
         //点赞
         function setLike(element) {
+            if(session.length != 32) {
+
+                layer.msg("请先登录!", {shift: -1, time: 1000, icon: 2}, function(){
+
+                });
+                return false;
+            }
+            var commentId = $(element).attr("data");
+            var params = {};
+            params.userId = userId;
+            params.session = session;
+            params.commentId = commentId;
             var flag = $(element).attr("like");
             var likeNumber = parseInt($("#like"+$(element).attr("data")).html());
             if(flag == "0") {
@@ -217,28 +231,59 @@
                 $(element).removeClass("layui-btn-primary");
                 $(element).addClass("layui-btn-warm");
                 likeNumber += 1;
+                $.ajax({
+                    type : 'post',
+                    async : false,
+                    url : '/comment/addLike',
+                    contentType : 'application/json;charset=UTF-8',
+                    data : JSON.stringify(params),
+                    success : function(data) {
+
+                    },
+                    error : function () {
+
+                    }
+                });
             } else if(flag == "1") {
                 $(element).attr("like", 0);
                 $(element).addClass("layui-btn-primary");
                 $(element).removeClass("layui-btn-warm");
                 likeNumber -= 1;
+                $.ajax({
+                    type : 'post',
+                    async : false,
+                    url : '/comment/delLike',
+                    contentType : 'application/json;charset=UTF-8',
+                    data : JSON.stringify(params),
+                    success : function(data) {
+
+                    },
+                    error : function () {
+
+                    }
+                });
             }
             $("#like"+$(element).attr("data")).html(likeNumber)
         }
         //根据最新，最热排序
         function getOrderBy(element) {
+            commentOrderBy = $(element).attr("orderBy");
+            console.log(commentOrderBy);
             $(".comment-select-a").removeClass("comment-selected");
             $(element).addClass("comment-selected");
-            getBookComment($(element).attr("data"));
-            commentOrderBy = $(element).attr("data");
+            getBookComment();
         }
 
         //打开评论编辑窗口
-        function modifyComment(comment) {
+        function modifyComment(element) {
+            if(session.length != 32) {
+                layer.msg("请先登录!", {shift: -1, time: 1000, icon: 2}, function(){
 
-            window.document.commentId = comment[0];
-            window.document.commentContent = comment[1];
-            console.log(comment);
+                });
+                return false;
+            }
+            window.document.commentId = $(element).attr("commentId");
+            window.document.commentContent = $(element).attr("data");
             layer.open({
                 type: 2,
                 title: ['编辑', 'background-color: #4a69bd;color:#e9e9e9;'],
@@ -249,7 +294,7 @@
                 content: 'modifyComment.html', //iframe的url
                 move: false,
                 end: function () {
-                    getBookComment(commentOrderBy);
+                    getBookComment();
                 }
             });
         }
@@ -257,6 +302,12 @@
         //打开评论新增窗口
         function addComment() {
             window.document.bookId = bookId;
+            if(session.length != 32) {
+                layer.msg("请先登录!", {shift: -1, time: 1000, icon: 2}, function(){
+
+                });
+                return false;
+            }
             layer.open({
                 type: 2,
                 title: ['分享你的想法', 'background-color: #4a69bd;color:#e9e9e9;'],
@@ -267,7 +318,7 @@
                 content: 'addComment.html', //iframe的url
                 move: false,
                 end: function () {
-                    getBookComment(commentOrderBy);
+                    getBookComment();
                 }
             });
         }
@@ -280,7 +331,7 @@
                 success : function(data) {
                     if(data.success){
                         var bookInfo = data.bookInfo;
-                        console.log(bookInfo);
+                        // console.log(bookInfo);
                         $("#bookIsbn").append(bookInfo.bookIsbn);
                         $("#bookName").append(bookInfo.bookName);
                         $("#bookAuthor").append(bookInfo.bookAuthor);
@@ -301,10 +352,11 @@
         }
 
         //根据id获取书籍评论
-        function getBookComment(orderBy) {
+        function getBookComment() {
+            console.log(commentOrderBy);
             $.ajax({
                 type : 'get',
-                url : '/comment/getCommentList?bookId=' + bookId + "&orderBy=" + orderBy,
+                url : '/comment/getCommentList?orderBy=' + commentOrderBy + "&bookId=" + bookId,
                 success : function(data) {
                     if(data.success){
                         console.log(data);
@@ -313,14 +365,19 @@
                         for (let i = 0; i < commentList.length; i++) {
                             html += '<div class="layui-row comment-content"><div class="layui-col-md2 content-user"><div class="content-username">' +
                                     commentList[i].userName + '</div><div class="content-like"><i class="layui-icon">&#xe6c6;</i><span id="like' + commentList[i].id + '">' + commentList[i].likeNumber + '</span></div>' +
-                                    '</div><div class="layui-col-md8 content-text">' + commentList[i].comment + '(' + commentList[i].createTime.substr(0, 10) + ')' +
+                                    '</div><div class="layui-col-md8 content-text">' + commentList[i].comment + '(' + commentList[i].createTime.substr(0, 16).replace("T", " ") + ')' +
                                     '</div><div class="layui-col-md2 content-button">';
                             if(commentList[i].userId == userId) {
-                                html += '<button class="layui-btn layui-btn-normal layui-btn-sm" onclick="modifyComment([\'' + commentList[i].id + '\',\'' + commentList[i].comment + '\']);">编辑</button>' +
+                                html += '<button class="layui-btn layui-btn-normal layui-btn-sm" data="' + commentList[i].comment + '" commentId="' + commentList[i].id + '" onclick="modifyComment(this);">编辑</button>' +
                                     '<button class="layui-btn layui-btn-danger layui-btn-sm" onclick="delComment(' + commentList[i].id + ');">删除</button>';
                             }
-                            html += '<button class="layui-btn layui-btn-primary layui-btn-sm" data="' + commentList[i].id + '" onclick="setLike(this);" like="0">' +
-                            '<i class="layui-icon">&#xe6c6;</i></button></div></div>';
+                            if(commentList[i].likeId > 0) {
+                                html += '<button class="layui-btn layui-btn-warm layui-btn-sm" data="' + commentList[i].id + '" onclick="setLike(this);" like="1">' +
+                                    '<i class="layui-icon">&#xe6c6;</i></button></div></div>';
+                            } else {
+                                html += '<button class="layui-btn layui-btn-primary layui-btn-sm" data="' + commentList[i].id + '" onclick="setLike(this);" like="0">' +
+                                    '<i class="layui-icon">&#xe6c6;</i></button></div></div>';
+                            }
                         }
                         if(html == "") {
                             html += '<div class="comment-bottom"><span onclick="getMoreBookList();">快来添加第一条评论吧</span></div>';
@@ -332,6 +389,38 @@
                         });
                     }
                 }
+            });
+        }
+        //删除评论
+        function delComment(commentId) {
+            var params = {};
+            params.userId = userId;
+            params.session = session;
+            params.commentId = commentId;
+            layer.confirm('确定要删除这条评论吗？', {
+                btn: ['是的','不是'] //按钮
+            }, function(){
+                $.ajax({
+                    type : 'post',
+                    async : false,
+                    url : '/comment/delComment',
+                    contentType : 'application/json;charset=UTF-8',
+                    data : JSON.stringify(params),
+                    success : function(data) {
+                        if(data.success){
+                            layer.msg(data.message, {shift: -1, time: 1000, icon: 1}, function(){
+                            });
+                            getBookComment();
+                        }
+                    },
+                    error : function () {
+                        layer.msg("删除失败！", {shift: -1, time: 1000, icon: 2}, function(){
+
+                        });
+                    }
+                });
+            }, function(){
+
             });
         }
     </script>

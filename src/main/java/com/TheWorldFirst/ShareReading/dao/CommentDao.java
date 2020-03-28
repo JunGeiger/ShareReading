@@ -1,8 +1,6 @@
 package com.TheWorldFirst.ShareReading.dao;
 
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,4 +33,33 @@ public interface CommentDao {
      */
     @Update("UPDATE comment SET comment = #{comment.comment}, updateTime = NOW() WHERE id = #{comment.commentId}")
     void updateComment(@Param("comment")HashMap<String, Object> comment);
+
+    /**
+     * 删除评论
+     * @param commentId
+     */
+    @Delete("DELETE FROM comment WHERE id = #{commentId}")
+    void delComment(@Param("commentId")Integer commentId);
+
+    /**
+     * 点赞
+     * @param commentId
+     * @param userId
+     */
+    void addLike(@Param("commentId")String commentId, @Param("userId")String userId);
+
+    /**
+     * 取消点赞
+     * @param commentId
+     * @param userId
+     */
+    @Delete("DELETE FROM `like` WHERE comment_id = #{commentId} AND user_id = #{userId}")
+    void delLike(@Param("commentId")String commentId, @Param("userId")String userId);
+
+    /**
+     * 取消点赞
+     * @param commentId
+     */
+    @Delete("DELETE FROM `like` WHERE comment_id = #{commentId}")
+    void delAllLike(@Param("commentId")Integer commentId);
 }

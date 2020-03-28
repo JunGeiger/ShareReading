@@ -14,7 +14,7 @@ public class CommentController {
     private CommentService commentService;
 
     /**
-     * 注册
+     * 新增评论
      * @param comment
      * @return
      */
@@ -24,7 +24,17 @@ public class CommentController {
     }
 
     /**
-     * 注册
+     * 删除评论
+     * @param comment
+     * @return
+     */
+    @PostMapping("/delComment")
+    public HashMap<String, Object> delComment(@RequestBody HashMap<String, Object> comment) {
+        return commentService.delComment(comment);
+    }
+
+    /**
+     * 编辑评论
      * @param comment
      * @return
      */
@@ -34,13 +44,33 @@ public class CommentController {
     }
 
     /**
-     * 注册
+     * 获取评论列表
      * @param bookId
      * @param orderBy
      * @return
      */
     @GetMapping("/getCommentList")
-    public HashMap<String, Object> getCommentList(@RequestParam("bookId") Integer bookId, @RequestParam("bookId") String orderBy) {
+    public HashMap<String, Object> getCommentList(@RequestParam("bookId") Integer bookId, @RequestParam("orderBy") String orderBy) {
         return commentService.getCommentList(bookId, orderBy);
+    }
+
+    /**
+     * 新增点赞
+     * @param like
+     * @return
+     */
+    @PostMapping("/addLike")
+    public HashMap<String, Object> addLike(@RequestBody HashMap<String, Object> like) {
+        return commentService.addLike(like);
+    }
+
+    /**
+     * 删除点赞
+     * @param like
+     * @return
+     */
+    @PostMapping("/delLike")
+    public HashMap<String, Object> delLike(@RequestBody HashMap<String, Object> like) {
+        return commentService.delLike(like);
     }
 }
