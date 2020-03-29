@@ -212,7 +212,8 @@
         });
         //点赞
         function setLike(element) {
-            if(session.length != 32) {
+            console.log(session);
+            if(session == null || session.length != 32) {
 
                 layer.msg("请先登录!", {shift: -1, time: 1000, icon: 2}, function(){
 
@@ -276,7 +277,7 @@
 
         //打开评论编辑窗口
         function modifyComment(element) {
-            if(session.length != 32) {
+            if(session == null || session.length != 32) {
                 layer.msg("请先登录!", {shift: -1, time: 1000, icon: 2}, function(){
 
                 });
@@ -302,7 +303,7 @@
         //打开评论新增窗口
         function addComment() {
             window.document.bookId = bookId;
-            if(session.length != 32) {
+            if(session == null || session.length != 32) {
                 layer.msg("请先登录!", {shift: -1, time: 1000, icon: 2}, function(){
 
                 });

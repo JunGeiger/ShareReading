@@ -442,7 +442,7 @@
         }
         //获取更多书籍
         function getMoreBookList() {
-            if(session.length != 32) {
+            if(session == null || session.length != 32) {
                 layer.msg("请先登录!", {shift: -1, time: 1000, icon: 2}, function(){
 
                 });

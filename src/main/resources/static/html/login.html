@@ -53,9 +53,17 @@
             #login {
                 margin-top: 30px;
             }
+            .load-icon {
+                font-size: 55px;
+                position: fixed;
+                z-index: 999;
+                left: 45%;
+                top: 30%;
+            }
         </style>
     </head>
     <body>
+    <i class="layui-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop load-icon"></i>
         <form class="layui-form" action="" id="login">
             <div class="layui-form-item">
                 <label class="layui-form-label"></label>
@@ -123,6 +131,7 @@
         var layer;
         var form;
         var index;
+        $(".load-icon").hide();
         layui.use(['layer', 'form'], function(){
             layer = layui.layer;
             form = layui.form;
@@ -306,6 +315,7 @@
                         window.localStorage.setItem("shareReading_user_session", data.user.session);
                         window.localStorage.setItem("shareReading_user_session_time", data.user.time);
                         flag = true;
+                        $(".load-icon").show();
                     }else{
                         parent.layer.msg(data.message, {shift: -1, time: 1000, icon: 2}, function(){
                         });
