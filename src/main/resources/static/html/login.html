@@ -95,6 +95,14 @@
                     <input type="text" name="email" id="email" lay-verify="email" placeholder="邮箱" autocomplete="off" class="layui-input">
                 </div>
             </div>
+            <div class="layui-form-item">
+                <div class="layui-input-inline">
+                    <input type="text" name="validateCode" id="validateCode" lay-verify="required" lay-reqText="请输入邮箱验证码" placeholder="邮箱验证码" autocomplete="off" class="layui-input" style="width: 200px;margin-left: 110px;">
+                </div>
+                <div class="layui-input-inline verification">
+                    <a class="verify-email" onclick="countDownTimer();">获取验证码</a>
+                </div>
+            </div>
             <div class="layui-form-item form-password">
                 <label class="layui-form-label"></label>
                 <div class="layui-input-inline">
@@ -108,14 +116,6 @@
                 <label class="layui-form-label"></label>
                 <div class="layui-input-inline">
                     <input type="password" name="rePassword" id="rePassword" lay-verify="rePassword" placeholder="重复密码" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-input-inline">
-                    <input type="text" name="validateCode" id="validateCode" lay-verify="required" lay-reqText="请输入邮箱验证码" placeholder="邮箱验证码" autocomplete="off" class="layui-input" style="width: 200px;margin-left: 110px;">
-                </div>
-                <div class="layui-input-inline verification">
-                    <a class="verify-email" onclick="countDownTimer();">获取验证码</a>
                 </div>
             </div>
             <div class="layui-form-item submit-content">
